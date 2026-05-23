@@ -2,7 +2,7 @@
 --- MOD_NAME: Bralatro
 --- MOD_ID: bralatro
 --- PREFIX: bra
---- MOD_AUTHOR: [Foegro and KevinE.S.The Lost Knight]
+--- MOD_AUTHOR: [Foegro, KevinE.S.The Lost Knight, FloofDumbus and Bringle Discord]
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
@@ -270,5 +270,44 @@ SMODS.Joker{
 	end,
 	calc_dollar_bonus = function(self, card)
 		return card.ability.extra.money
+	end,
+}
+
+SMODS.Joker{
+	key = "greentoad",
+	atlas = "jokers",
+	pos = {
+		x = 7,
+		y = 2,
+	},
+	rarity = 2,
+	cost = 7,
+	config = {
+		mult = 5,
+		extra = 50,
+	},
+	loc_vars = function(self, info_queue, card)
+		return {
+			vars = {
+				card.ability.extra
+			}
+		}
+	end,
+	calculate = function(self, card, context) 
+		if context.joker_main then
+			return {
+				mult = card.ability.mult,
+				mult_message = {
+					message = localize{
+						type = "variable",
+						key = "a_mult",
+						vars = {
+							card.ability.extra
+						},
+					},
+					colour = G.C.MULT,
+				},
+			}
+		end
 	end,
 }

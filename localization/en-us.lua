@@ -46,6 +46,12 @@ return {
 					"to increase the amount earned by {C:money}$#2#{}."
 				}
 			},
+			j_bra_greentoad = {
+				name = "Greentoad",
+				text = {
+					"{C:mult}+#1#{} Mult"
+				},
+			},
 		},
         Other={},
         Planet={},
