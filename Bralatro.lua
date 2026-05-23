@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.2.0
+--- VERSION: 0.3.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
