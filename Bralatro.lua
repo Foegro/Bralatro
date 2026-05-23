@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.3.0
+--- VERSION: 0.3.1
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -284,12 +284,11 @@ SMODS.Joker{
 	cost = 7,
 	config = {
 		mult = 5,
-		extra = 50,
 	},
 	loc_vars = function(self, info_queue, card)
 		return {
 			vars = {
-				card.ability.extra
+				card.ability.mult
 			}
 		}
 	end,
@@ -300,9 +299,9 @@ SMODS.Joker{
 				mult_message = {
 					message = localize{
 						type = "variable",
-						key = "a_mult",
+						key = "a_bra_greentoad_mult",
 						vars = {
-							card.ability.extra
+							card.ability.mult
 						},
 					},
 					colour = G.C.MULT,

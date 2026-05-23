@@ -49,7 +49,7 @@ return {
 			j_bra_greentoad = {
 				name = "Greentoad",
 				text = {
-					"{C:mult}+#1#{} Mult"
+					"+{C:mult}#1#{s:0.5,C:inactive}.{C:mult}0{} Mult"
 				},
 			},
 		},
@@ -83,7 +83,9 @@ return {
         suits_plural={},
         suits_singular={},
         tutorial={},
-        v_dictionary={},
+        v_dictionary={
+			a_bra_greentoad_mult = "+#1#.0 Mult",
+		},
         v_text={},
     },
 }
