@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891b8a
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 1.0.0
+--- VERSION: 0.0.1
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -23,12 +23,12 @@ SMODS.Joker{
 	key = "kevines",
 	atlas = "jokers",
 	pos = {
-		x = 1,
-		y = 0,
+		x = 3,
+		y = 1,
 	},
 	soul_pos = {
-		x = 1,
-		y = 1,
+		x = 3,
+		y = 2,
 	},
 	config = {
 		x_mult = 1,
@@ -90,4 +90,33 @@ SMODS.Joker{
 			end
 		end
 	end
+}
+
+SMODS.Joker{
+	key = "foegro",
+	atlas = "jokers",
+	pos = {
+		x = 4,
+		y = 1,
+	},
+	soul_pos = {
+		x = 4,
+		y = 2,
+	},
+	rarity = 4,
+	cost = 20,
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue+1] = { key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
+	end,
+	blueprint_compat = true,
+	calculate = function(self, card, context)
+		if context.discard then
+			local tarot = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'car')
+			tarot:set_edition({negative = true})
+			tarot:add_to_deck()
+			tarot.sell_cost = 0
+			tarot.sell_cost_label = tarot.facing == 'back' and '?' or tarot.sell_cost
+			G.consumeables:emplace(tarot)
+		end
+	end,
 }

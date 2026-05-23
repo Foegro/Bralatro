@@ -13,7 +13,15 @@ return {
 					"from each removal.",
 					"{s:0.8,C:inactive}(Currently {s:0.8,X:mult,C:white}X#2#{s:0.8,C:inactive} Mult)",
 				}
-			}
+			},
+			j_bra_foegro = {
+				name = "{C:tarot}Foegro the porble guy",
+				text = {
+					"Creates a {C:dark_edition}Negative {C:attention}Tarot Card",
+					"when a card is {C:attention}discarded",
+					"and set their {C:attention}sell value {}to {C:attention}$0"
+				}
+			},
 		},
         Other={},
         Planet={},
