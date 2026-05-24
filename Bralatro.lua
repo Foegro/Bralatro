@@ -349,8 +349,8 @@ SMODS.Joker{
 		x = 9,
 		y = 2,
 	},
-	--rarity =
-	-- cost =
+	rarity = 1,
+	cost = 6,
 	config = {
 		extra = {
 			chance = 2,
