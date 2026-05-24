@@ -65,6 +65,16 @@ return {
 					"when a {C:attention}Wild Card{} is scored",
 				}
 			},
+			j_bra_bug_sticker_bucket_origami = {
+				name = "The Bug, The Sticker, The Bucket and The Origami",
+				text = {
+					"For each scored card:",
+					"{C:green}#1# in #2#{} chance to add an {C:attention}enhancement.",
+					"{C:green}#1# in #3#{} chance to add an {C:attention}edition {C:inactive}(Negative excluded){}.",
+					"{C:green}#1# in #4#{} chance to add a {C:attention}seal.",
+					"{C:inactive}Does not apply if the card already has it."
+				}
+			},
 		},
         Other={},
         Planet={},

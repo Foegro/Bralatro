@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.5.0
+--- VERSION: 0.6.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -375,6 +375,84 @@ SMODS.Joker{
 				dollars = card.ability.extra.money,
 				card = card
 			}
+		end
+	end,
+}
+
+SMODS.Joker{
+	key = "bug_sticker_bucket_origami",
+	atlas = "jokers",
+	pos = {
+		x = 6,
+		y = 1,
+	},
+	soul_pos = {
+		x = 6,
+		y = 2,
+	},
+	rarity = "bra_brepic",
+	cost = 9,
+	config = {
+		extra = {
+			enhancement_chance = 2,
+			edition_chance = 5,
+			seal_chance = 20,
+		}
+	},
+	loc_vars = function(self,info_queue,card)
+		return {
+			vars = {
+				''..(G.GAME and G.GAME.probabilities.normal or 1),
+				card.ability.extra.enhancement_chance,
+				card.ability.extra.edition_chance,
+				card.ability.extra.seal_chance,
+			}
+		}
+	end,
+	blueprint_compat = true,
+	calculate = function(self,card,context)
+		if context.before then
+			local enhanced = false
+			for k, v in ipairs(context.scoring_hand) do
+				local card_enhanced = false
+				if v.config.center == G.P_CENTERS.c_base and pseudorandom("bug_sticker_bucket_origami") < G.GAME.probabilities.normal/card.ability.extra.enhancement_chance then
+					v:set_ability(SMODS.poll_enhancement{
+						guaranteed = true,
+						type_key = "bug_sticker_bucket_origami"
+					})
+					enhanced = true
+					card_enhanced = true
+				end
+				if not v.edition and pseudorandom("bug_sticker_bucket_origami") < G.GAME.probabilities.normal/card.ability.extra.edition_chance then
+					v:set_edition(SMODS.poll_edition{
+						guaranteed = true,
+						type_key = "bug_sticker_bucket_origami"
+					})
+					enhanced = true
+					card_enhanced = true
+				end
+				if not v.seal and pseudorandom("bug_sticker_bucket_origami") < G.GAME.probabilities.normal/card.ability.extra.seal_chance then
+					v:set_seal(SMODS.poll_seal{
+						guaranteed = true,
+						type_key = "bug_sticker_bucket_origami"
+					})
+					enhanced = true
+					card_enhanced = true
+				end
+				if card_enhanced then
+					G.E_MANAGER:add_event(Event{func = function()
+						v:juice_up()
+						return true
+					end})
+				end
+			end
+			if not enhanced then
+				return {
+					message = localize('k_nope_ex'),
+					message_card = card,
+					colour = G.C.SECONDARY_SET.Tarot,
+				}
+			end
 		end
 	end,
 }
