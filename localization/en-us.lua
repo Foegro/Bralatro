@@ -52,6 +52,12 @@ return {
 					"+{C:mult}#1#{s:0.5,C:inactive}.{C:mult}0{} Mult"
 				},
 			},
+			j_bra_chat = {
+				name = "Chat",
+				text = {
+					"Occasionally gives you donations",
+				}
+			}
 		},
         Other={},
         Planet={},

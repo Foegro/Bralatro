@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.3.1
+--- VERSION: 0.4.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -306,6 +306,35 @@ SMODS.Joker{
 					},
 					colour = G.C.MULT,
 				},
+			}
+		end
+	end,
+}
+
+SMODS.Joker{
+	key = "chat",
+	atlas = "jokers",
+	pos = {
+		x = 0,
+		y = 1,
+	},
+	soul_pos = {
+		x = 0,
+		y = 2,
+	},
+	rarity = 4,
+	cost = 20,
+	config = {
+		extra = {
+			money_max = 5,
+			money_chance = 100,
+		}
+	},
+	calculate = function(self, card, context)
+		if pseudorandom('chat') < G.GAME.probabilities.normal/card.ability.extra.money_chance then
+			return {
+				dollars = math.ceil(pseudorandom('chat_payout')*card.ability.extra.money_max),
+				message_card = card
 			}
 		end
 	end,
