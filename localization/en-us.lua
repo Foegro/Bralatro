@@ -57,7 +57,14 @@ return {
 				text = {
 					"Occasionally gives you donations",
 				}
-			}
+			},
+			j_bra_trans_flavio = {
+				name = "Transgender Flavio",
+				text = {
+					"{C:green}#1# in #2#{} chance to give {C:money}$#3#",
+					"when a {C:attention}Wild Card{} is scored",
+				}
+			},
 		},
         Other={},
         Planet={},

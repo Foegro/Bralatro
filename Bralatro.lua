@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.4.0
+--- VERSION: 0.5.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -292,6 +292,7 @@ SMODS.Joker{
 			}
 		}
 	end,
+	blueprint_compat = true,
 	calculate = function(self, card, context) 
 		if context.joker_main then
 			return {
@@ -330,11 +331,49 @@ SMODS.Joker{
 			money_chance = 100,
 		}
 	},
+	blueprint_compat = true,
 	calculate = function(self, card, context)
 		if pseudorandom('chat') < G.GAME.probabilities.normal/card.ability.extra.money_chance then
 			return {
 				dollars = math.ceil(pseudorandom('chat_payout')*card.ability.extra.money_max),
 				message_card = card
+			}
+		end
+	end,
+}
+
+SMODS.Joker{
+	key = "trans_flavio",
+	atlas = "jokers",
+	pos = {
+		x = 9,
+		y = 2,
+	},
+	--rarity =
+	-- cost =
+	config = {
+		extra = {
+			chance = 2,
+			money = 5,
+		}
+	},
+	loc_vars = function(self,info_queue,card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
+		return {
+			vars = {
+				''..(G.GAME and G.GAME.probabilities.normal or 1),
+				card.ability.extra.chance,
+				card.ability.extra.money
+			}
+		}
+	end,
+	blueprint_compat = true,
+	calculate = function(self,card,context)
+		if context.individual and context.other_card.ability.name == 'Wild Card'
+		and pseudorandom("Trans Flavio") < G.GAME.probabilities.normal/card.ability.extra.chance then
+			return {
+				dollars = card.ability.extra.money,
+				card = card
 			}
 		end
 	end,
