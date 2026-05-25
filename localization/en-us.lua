@@ -19,7 +19,7 @@ return {
 				text = {
 					"Creates a {C:dark_edition}Negative {C:tarot}Tarot{} Card",
 					"when a card is {C:attention}discarded",
-					"and set their {C:attention}sell value {}to {C:attention}$0"
+					"and set their {C:attention}sell value {}to {C:attention}$0",
 				}
 			},
 			j_bra_wiimote = {
@@ -75,6 +75,14 @@ return {
 					"{C:inactive}Does not apply if the card already has it."
 				}
 			},
+			j_bra_bringle = {
+				name = "Bringle",
+				text = {
+					"Gives {X:chips,C:white}X#1#{} Chips",
+					"whenever a {C:attention}Joker{} is triggered.",
+					"{C:inactive}(Bringle excluded)",
+				},
+			},
 		},
         Other={},
         Planet={},
@@ -94,6 +102,7 @@ return {
 			k_bra_brepic = "Brepic",
 			k_bra_eee = "eeeeeeeeeeeeee",
 			k_bra_big_eee = "EEEEEEEEEEEEEEEEEEEEEEE",
+			k_bra_big_hampter = "Hampter!!!",
 		},
         high_scores={},
         labels={

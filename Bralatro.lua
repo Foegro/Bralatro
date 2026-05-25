@@ -6,11 +6,24 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.6.0
+--- VERSION: 0.7.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
 ------------MOD CODE -------------------------
+
+local success, dpAPI = pcall(require, "debugplus-api")
+local logger = { -- Placeholder logger, for when DebugPlus isn't available
+    log = print,
+    debug = print,
+    info = print,
+    warn = print,
+    error = print
+}
+if success and dpAPI.isVersionCompatible(1) then
+	local debugplus = dpAPI.registerID("Bralatro")
+    logger = debugplus.logger -- Provides the logger object
+end
 
 SMODS.Atlas{
 	key = "jokers",
@@ -19,6 +32,7 @@ SMODS.Atlas{
 	path = "Jokers.png",
 }
 
+G.C.BRALATRO = HEX("891B8A")
 G.C.BREPIC = {100/255,0/255,100/255,1}
 SMODS.Rarity{
 	key = "brepic",
@@ -44,6 +58,9 @@ SMODS.Joker{
 	},
 	rarity = 4,
 	cost = 20,
+	pools = {
+		["Bralatro"] = true
+	},
 	blueprint_compat = true,
 	perishable_compat = false,
 	loc_vars = function(self, info_queue, card)
@@ -113,12 +130,16 @@ SMODS.Joker{
 	},
 	rarity = 4,
 	cost = 20,
+	pools = {
+		["Bralatro"] = true
+	},
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue+1] = { key = "e_negative_consumable", set = "Edition", config = { extra = 1 } }
 	end,
 	blueprint_compat = true,
 	calculate = function(self, card, context)
 		if context.discard then
+			--logger.log(inspect(card.children.floating_sprite))
 			local tarot = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'car')
 			tarot:set_edition({negative = true})
 			tarot:add_to_deck()
@@ -143,6 +164,9 @@ SMODS.Joker{
 	},
 	rarity = 2,
 	cost = 3,
+	pools = {
+		["Bralatro"] = true
+	},
 	config = {
 		chips = 0,
 		chips_mod = 33,
@@ -183,6 +207,9 @@ SMODS.Joker{
 	},
 	rarity = "bra_brepic",
 	cost = 9,
+	pools = {
+		["Bralatro"] = true
+	},
 	config = {
 		mult = 0,
 		mult_mod = 33,
@@ -227,6 +254,9 @@ SMODS.Joker{
 	},
 	rarity = 2,
 	cost = 8,
+	pools = {
+		["Bralatro"] = true
+	},
 	config = {
 		extra = {
 			money = 0,
@@ -285,6 +315,9 @@ SMODS.Joker{
 	config = {
 		mult = 5,
 	},
+	pools = {
+		["Bralatro"] = true
+	},
 	loc_vars = function(self, info_queue, card)
 		return {
 			vars = {
@@ -325,6 +358,9 @@ SMODS.Joker{
 	},
 	rarity = 4,
 	cost = 20,
+	pools = {
+		["Bralatro"] = true
+	},
 	config = {
 		extra = {
 			money_max = 5,
@@ -351,6 +387,9 @@ SMODS.Joker{
 	},
 	rarity = 1,
 	cost = 6,
+	pools = {
+		["Bralatro"] = true
+	},
 	config = {
 		extra = {
 			chance = 2,
@@ -392,6 +431,9 @@ SMODS.Joker{
 	},
 	rarity = "bra_brepic",
 	cost = 9,
+	pools = {
+		["Bralatro"] = true
+	},
 	config = {
 		extra = {
 			enhancement_chance = 2,
@@ -426,7 +468,8 @@ SMODS.Joker{
 				if not v.edition and pseudorandom("bug_sticker_bucket_origami") < G.GAME.probabilities.normal/card.ability.extra.edition_chance then
 					v:set_edition(SMODS.poll_edition{
 						guaranteed = true,
-						type_key = "bug_sticker_bucket_origami"
+						type_key = "bug_sticker_bucket_origami",
+						no_negative = true,
 					})
 					enhanced = true
 					card_enhanced = true
@@ -455,4 +498,55 @@ SMODS.Joker{
 			end
 		end
 	end,
+}
+
+SMODS.Joker{
+	key = "bringle",
+	atlas = "jokers",
+	pos = {
+		x = 4,
+		y = 3,
+	},
+	soul_pos = {
+		x = 8,
+		y = 4,
+	},
+	rarity = 4,
+	cost = 20,
+	pools = {
+		["Bralatro"] = true,
+	},
+	config = {
+		extra = {
+			xchips = 1.5
+		},
+	},
+	loc_vars = function(self,info_queue,card)
+		return {
+			vars = {
+				card.ability.extra.xchips,
+			},
+		}
+	end,
+	update = function(self, card, dt)
+		if card.ability then
+			if card.ability.extra.image then card.config.center.pos.x = 4+card.ability.extra.image
+			else
+				card.ability.extra.image = math.min(4,math.floor(5*pseudorandom("Bringle Image")))
+				card.config.center.pos.x = 4+card.ability.extra.image
+			end
+		end
+	end,
+	calculate = function(self,card,context)
+		if context.other_joker and context.other_joker.ability.name ~= "j_bra_bringle" then
+			return {
+				xchips = card.ability.extra.xchips,
+				xchip_message = {
+					message = localize("k_bra_big_hampter"),
+					colour = G.C.CHIPS,
+				},
+				message_card = card,
+			}
+		end
+	end
 }
