@@ -83,6 +83,15 @@ return {
 					"{C:inactive}(Bringle excluded)",
 				},
 			},
+			j_bra_hampter_wheel = {
+				name = "Hampter Wheel",
+				text = {
+					"Gains {C:mult}#1#{} Rubees per round.",
+					"Sell to create a {C:legendary}Legendary{} Joker",
+					"after gaining {C:mult}#2#{} Rubees.",
+					"{X:mult,C:white}#3#/#2#{} Rubees",
+				},
+			},
 		},
         Other={},
         Planet={},
@@ -117,6 +126,7 @@ return {
         tutorial={},
         v_dictionary={
 			a_bra_greentoad_mult = "+#1#.0 Mult",
+			a_bra_rubees = "#1# Rubees!",
 		},
         v_text={},
     },

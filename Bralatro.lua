@@ -2,11 +2,11 @@
 --- MOD_NAME: Bralatro
 --- MOD_ID: bralatro
 --- PREFIX: bra
---- MOD_AUTHOR: [Foegro, KevinE.S.The Lost Knight, FloofDumbus and Bringle Discord]
+--- MOD_AUTHOR: [Foegro, KevinE.S.The Lost Knight, FloofDumbus, and Bringle Discord]
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.7.1
+--- VERSION: 0.8.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -32,7 +32,6 @@ SMODS.Atlas{
 	path = "Jokers.png",
 }
 
-G.C.BRALATRO = HEX("891B8A")
 G.C.BREPIC = {100/255,0/255,100/255,1}
 SMODS.Rarity{
 	key = "brepic",
@@ -545,6 +544,7 @@ SMODS.Joker{
 			},
 		}
 	end,
+	blueprint_compat = true,
 	update = function(self, card, dt)
 		if card.ability then
 			if card.ability.extra.image then card.config.center.pos.x = 4+card.ability.extra.image
@@ -566,4 +566,61 @@ SMODS.Joker{
 			}
 		end
 	end
+}
+
+SMODS.Joker{
+	key = "hampter_wheel",
+	atlas = "jokers",
+	pos = {
+		x = 2,
+		y = 0
+	},
+	rarity = "bra_brepic",
+	cost = 10,
+	pools = {
+		["Bralatro"] = true,
+	},
+	config = {
+		extra = {
+			rubee_goal = 1000000,
+			rubees = 0,
+			rubees_per_round = 200000,
+		},
+	},
+	loc_vars = function(self,info_queue,card)
+		return {
+			vars = {
+				tostring(card.ability.extra.rubees_per_round),
+				tostring(card.ability.extra.rubee_goal),
+				tostring(card.ability.extra.rubees),
+			}
+		}
+	end,
+	blueprint_compat = true,
+	eternal_compat = false,
+	perishable_compat = false,
+	calculate = function(self,card,context)
+		if context.end_of_round and context.main_eval then
+			card.ability.extra.rubees = card.ability.extra.rubees+card.ability.extra.rubees_per_round
+			return {
+				message = localize{
+					type = "variable",
+					key = "a_bra_rubees",
+					vars = {
+						tostring(card.ability.extra.rubees)
+					},
+				},
+				message_card = card
+			}
+		end
+		if context.selling_self and card.ability.extra.rubees >= card.ability.extra.rubee_goal then
+			local joker = SMODS.create_card{
+				set = "Joker",
+				legendary = true,
+				key_append = "Hampter Wheel",
+			}
+			joker:add_to_deck()
+			G.jokers:emplace(joker)
+		end
+	end,
 }
