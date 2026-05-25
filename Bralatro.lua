@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.7.0
+--- VERSION: 0.7.1
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -112,6 +112,23 @@ SMODS.Joker{
 					colour = G.C.MULT,
 					message_card = card
 				}
+			end
+		end
+	end
+}
+
+SMODS.Sound{
+	key = "music_bergentruck",
+	path = "bergentruck.ogg",
+	pitch = 1,
+	sync = false,
+	select_music_track = function(self)
+		if G.jokers then
+			for k, v in ipairs(G.jokers.cards) do
+				if v.ability.name == "j_bra_foegro" then
+					--logger.log("Check")
+					return 999999
+				end
 			end
 		end
 	end
