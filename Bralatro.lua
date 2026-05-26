@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.8.0
+--- VERSION: 0.9.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -621,6 +621,90 @@ SMODS.Joker{
 			}
 			joker:add_to_deck()
 			G.jokers:emplace(joker)
+		end
+	end,
+}
+
+SMODS.Joker{
+	key = "broob",
+	atlas = "jokers",
+	pos = {
+		x = 8,
+		y = 0,
+	},
+	rarity = 2,
+	cost = 6,
+	pools = {
+		["Bralatro"] = true,
+	},
+	config = {
+		xmult = 2,
+	},
+	blueprint_compat = true,
+	calculate = function(self,card,context)
+		if context.joker_main then
+			return {xmult = card.ability.xmult}
+		end
+		if context.end_of_round and context.main_eval then
+			local pos = nil
+			for k, v in ipairs(G.jokers.cards) do
+				if v == card then
+					pos = k
+					break
+				end
+			end
+			if G.jokers.cards[pos-1] and G.jokers.cards[pos-1].ability.name ~= "j_bra_broob" then
+				local old_joker = G.jokers.cards[pos-1]
+				old_joker:flip()
+				card_eval_status_text(G.jokers.cards[pos-1],"extra",nil,nil,nil,{
+					message = localize("k_bra_boobify"),
+					colour = HEX("8400c4")
+				})
+				G.E_MANAGER:add_event(Event{trigger = "after", delay = 0.3,
+					func = function()
+						local joker = SMODS.create_card{
+							set = "Joker",
+							key = "j_bra_broob",
+						}
+						joker.edition = old_joker.edition
+						joker.ability.eternal = old_joker.ability.eternal
+						joker.ability.perishable = old_joker.ability.perishable
+						joker.ability.perish_tally = old_joker.ability.perish_tally
+						joker.ability.rental = old_joker.ability.rental
+						joker:add_to_deck()
+						joker.facing='back'
+						joker:set_card_area(G.jokers)
+						G.jokers.cards[pos-1] = joker
+						joker:flip()
+					return true
+				end})
+			end
+			if G.jokers.cards[pos+1] and G.jokers.cards[pos+1].ability.name ~= "j_bra_broob" then
+				local old_joker = G.jokers.cards[pos+1]
+				old_joker:flip()
+				card_eval_status_text(G.jokers.cards[pos+1],"extra",nil,nil,nil,{
+					message = localize("k_bra_boobify"),
+					colour = HEX("8400c4")
+				})
+				G.E_MANAGER:add_event(Event{trigger = "after", delay = 0.3,
+					func = function()
+						local joker = SMODS.create_card{
+							set = "Joker",
+							key = "j_bra_broob",
+						}
+						joker.edition = old_joker.edition
+						joker.ability.eternal = old_joker.ability.eternal
+						joker.ability.perishable = old_joker.ability.perishable
+						joker.ability.perish_tally = old_joker.ability.perish_tally
+						joker.ability.rental = old_joker.ability.rental
+						joker:add_to_deck()
+						joker.facing='back'
+						joker:set_card_area(G.jokers)
+						G.jokers.cards[pos+1] = joker
+						joker:flip()
+					return true
+				end})
+			end
 		end
 	end,
 }

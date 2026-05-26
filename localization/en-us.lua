@@ -92,6 +92,14 @@ return {
 					"{X:mult,C:white}#3#/#2#{} Rubees",
 				},
 			},
+			j_bra_broob = {
+				name = "Broob",
+				text = {
+					"{X:mult,C:white}X2{} Mult",
+					"At the {C:attention}end of round{}",
+					"transforms {C:attention}adjacened{} Jokers into {C:attention}Broobs",
+				},
+			},
 		},
         Other={},
         Planet={},
@@ -112,6 +120,7 @@ return {
 			k_bra_eee = "eeeeeeeeeeeeee",
 			k_bra_big_eee = "EEEEEEEEEEEEEEEEEEEEEEE",
 			k_bra_big_hampter = "Hampter!!!",
+			k_bra_boobify = "Broobify",
 		},
         high_scores={},
         labels={
