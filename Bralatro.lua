@@ -723,9 +723,11 @@ SMODS.Joker{
 	config = {
 		extra = {},
 	},
-	loc_vars = function(self,info_queue,card)
-	
-	end,
+	rarity = 4,
+	cost = 20,
+	pools = {
+		["Bralatro"] = true,
+	},
 	update = function(self, card, dt)
 		if card.ability then
 			if card.ability.extra.image then 
