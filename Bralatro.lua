@@ -23,6 +23,28 @@ local logger = { -- Placeholder logger, for when DebugPlus isn't available
 if success and dpAPI.isVersionCompatible(1) then
 	local debugplus = dpAPI.registerID("Bralatro")
     logger = debugplus.logger -- Provides the logger object
+	debugplus.addCommand{
+		name = "test",
+        shortDesc = "Testing command",
+        desc = "Moves blind to the middle of the screen",
+		exec = function(args, rawArgs, dp)
+			local ca = CardArea(G.hand.T.x+G.hand.T.w/2-3*1.02*G.CARD_W/2, G.hand.T.y-1, 3*1.02*G.CARD_W,1.05*G.CARD_H, { card_limit = 3, type = 'consumeable', highlight_limit = 1 })
+			for i = 1, 3 do
+				local card = SMODS.create_card{
+					set = "Base"
+				}
+				card:add_to_deck()
+				ca:emplace(card)
+			end
+			return "x: "..G.jokers.T.x.." y: "..G.jokers.T.y
+		end
+	}
+end
+
+SMODS.current_mod.menu_cards = function()
+	return {
+		{key = "j_bra_bringle"}
+	}
 end
 
 SMODS.Atlas{
@@ -745,7 +767,7 @@ SMODS.Joker{
 					card.config.center.soul_pos = card.ability.extra.image
 				else
 					card.ability.extra.image = {
-						x = 3+math.min(2,math.floor(3*pseudorandom("Mods Image"))),
+						x = 2+math.min(5,math.floor(6*pseudorandom("Mods Image"))),
 						y =	4
 					}
 					card.config.center.soul_pos = card.ability.extra.image
