@@ -2,11 +2,11 @@
 --- MOD_NAME: Bralatro
 --- MOD_ID: bralatro
 --- PREFIX: bra
---- MOD_AUTHOR: [Foegro, KevinE.S.The Lost Knight, FloofDumbus, and Bringle Discord]
+--- MOD_AUTHOR: [Foegro, KevinE.S.The Lost Knight, FloofDumbus, WaluigiTheLagger, Bringle Discord]
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.9.0
+--- VERSION: 0.10.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -155,7 +155,7 @@ SMODS.Joker{
 	blueprint_compat = true,
 	calculate = function(self, card, context)
 		if context.discard then
-			--logger.log(inspect(card.children.floating_sprite))
+			logger.log(inspect(card.children.floating_sprite))
 			local tarot = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'car')
 			tarot:set_edition({negative = true})
 			tarot:add_to_deck()
@@ -707,4 +707,70 @@ SMODS.Joker{
 			end
 		end
 	end,
+}
+
+SMODS.Joker{
+	key = "mods",
+	atlas = "jokers",
+	pos = {
+		x = 3,
+		y = 3,
+	},
+	soul_pos = {
+		x = 3,
+		y = 4,
+	},
+	config = {
+		extra = {},
+	},
+	loc_vars = function(self,info_queue,card)
+	
+	end,
+	update = function(self, card, dt)
+		if card.ability then
+			if card.ability.extra.image then 
+				card.config.center.soul_pos = card.ability.extra.image
+			else
+				if pseudorandom("Mods Image") < 0.01 then
+					card.ability.extra.image = {
+						x = 1+math.min(3,math.floor(4*pseudorandom("Mods Image"))),
+						y =	3
+					}
+					card.config.center.soul_pos = card.ability.extra.image
+				else
+					card.ability.extra.image = {
+						x = 3+math.min(2,math.floor(3*pseudorandom("Mods Image"))),
+						y =	4
+					}
+					card.config.center.soul_pos = card.ability.extra.image
+				end
+			end
+		end
+	end,
+	calculate = function(self,card,context)
+		if context.joker_main then
+			local unplayed_hand = {}
+			for k, v in ipairs(context.full_hand) do
+				local played = false
+				if not v.debuff then
+					for _k, _v in ipairs(context.scoring_hand) do
+						if _v == v and not v.debu then played = true end
+					end
+				end
+				if not played then unplayed_hand[#unplayed_hand+1] = v end
+			end
+			local total_chips = 0
+			for k, v in ipairs(unplayed_hand) do
+				local was_debuffed = v.debuff
+				v.debuff = false
+				total_chips = total_chips + v:get_chip_bonus()
+				v.debuff = was_debuffed
+			end
+			if total_chips > 1 then
+				return {
+					xchips = total_chips
+				}
+			end
+		end
+	end
 }

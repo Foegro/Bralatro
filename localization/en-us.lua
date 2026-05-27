@@ -100,6 +100,14 @@ return {
 					"transforms {C:attention}adjacened{} Jokers into {C:attention}Broobs",
 				},
 			},
+			j_bra_mods = {
+				name = "Mod Team",
+				text = {
+					"Gives {X:chips,C:white}XChips{} equal to",
+					"the total amount of {C:chips}Chips{} on all",
+					"{C:attention}non-scoring{} or {C:attention}debuffed{} cards played",
+				}
+			},
 		},
         Other={},
         Planet={},
