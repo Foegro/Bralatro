@@ -196,6 +196,7 @@ SMODS.Joker{
 		}
 	end,
 	blueprint_compat = true,
+	perishable_compat = false,
 	calculate = function(self, card, context)
 		if context.before and next(context.poker_hands["Three of a Kind"]) and not context.blueprint then
 			card.ability.chips = card.ability.chips+card.ability.chips_mod
@@ -239,6 +240,7 @@ SMODS.Joker{
 		}
 	end,
 	blueprint_compat = true,
+	perishable_compat = false,
 	calculate = function(self, card, context)
 		if context.before and next(context.poker_hands["Three of a Kind"]) and not context.blueprint then
 			card.ability.mult = card.ability.mult+card.ability.mult_mod
@@ -288,6 +290,7 @@ SMODS.Joker{
 		}
 	end,
 	blueprint_compat = false,
+	perishable_compat = false,
 	calculate = function(self, card, context)
 		if context.setting_blind then
 			local pos = nil
@@ -723,6 +726,7 @@ SMODS.Joker{
 	config = {
 		extra = {},
 	},
+	blueprint_compat = true,
 	rarity = 4,
 	cost = 20,
 	pools = {
