@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.10.0
+--- VERSION: 0.11.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -802,3 +802,55 @@ SMODS.Joker{
 		end
 	end
 }
+
+SMODS.Joker{
+	key = "joker3",
+	atlas = "jokers",
+	pos = {
+		x = 2,
+		y = 3,
+	},
+	config = {
+		extra = 3
+	},
+	loc_vars = function(self,info_queue,card)
+		return {
+			vars = {
+				card.ability.extra
+			}
+		}
+	end,
+	blueprint_compat = true,
+	rarity = 2,
+	cost = 6,
+	calculate = function(self,card,context)
+		if context.joker_main then
+			local queens = {}
+			for k, v in ipairs(context.scoring_hand) do
+				if v:get_id() == 12 then queens[#queens+1] = v end
+			end
+			if #queens >= card.ability.extra then
+				G.playing_card = (G.playing_card and G.playing_card + 1) or 1
+				local _card = copy_card(pseudorandom_element(queens,"Mother 3"), nil, nil, G.playing_card)
+				_card:add_to_deck()
+				G.deck.config.card_limit = G.deck.config.card_limit + 1
+				table.insert(G.playing_cards, _card)
+				G.hand:emplace(_card)
+				_card.states.visible = nil
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						_card:start_materialize()
+						return true
+					end
+				}))
+				return {
+					message = localize('k_copied_ex'),
+					colour = G.C.CHIPS,
+					card = card,
+					playing_cards_created = {true}
+				}
+			end
+		end
+	end
+}
+

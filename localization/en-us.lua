@@ -108,6 +108,14 @@ return {
 					"{C:attention}non-scoring{} or {C:attention}debuffed{} cards played",
 				}
 			},
+			j_bra_joker3 = {
+				name = "Joker 3",
+				text = {
+					"If hand contains at least {C:attention}3{} scoring {C:attention}Queens",
+					"create a copy of a {C:attention}random{} one of them",
+					"and place it in your hand",
+				}
+			}
 		},
         Other={},
         Planet={},
