@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.12.1
+--- VERSION: 0.13.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -24,19 +24,12 @@ if success and dpAPI.isVersionCompatible(1) then
 	local debugplus = dpAPI.registerID("Bralatro")
     logger = debugplus.logger -- Provides the logger object
 	debugplus.addCommand{
-		name = "test",
+		name = "suitless_mode",
         shortDesc = "Testing command",
         desc = "Moves blind to the middle of the screen",
 		exec = function(args, rawArgs, dp)
-			local ca = CardArea(G.hand.T.x+G.hand.T.w/2-3*1.02*G.CARD_W/2, G.hand.T.y-1, 3*1.02*G.CARD_W,1.05*G.CARD_H, { card_limit = 3, type = 'consumeable', highlight_limit = 1 })
-			for i = 1, 3 do
-				local card = SMODS.create_card{
-					set = "Base"
-				}
-				card:add_to_deck()
-				ca:emplace(card)
-			end
-			return "x: "..G.jokers.T.x.." y: "..G.jokers.T.y
+			G.GAME.suitless_mode = args[1]
+			return G.GAME.suitless_mode
 		end
 	}
 end
@@ -92,7 +85,7 @@ SMODS.Joker{
 			}
 		}
 	end,
-	calculate = function(self, card, context) 
+	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
 				xmult = card.ability.x_mult
@@ -123,10 +116,10 @@ SMODS.Joker{
 							v.vampired = nil
 							return true
 						end
-					})) 
+					}))
 				end
 			end
-			if #enhanced > 0 or #editioned > 0 or #sealed > 0 then 
+			if #enhanced > 0 or #editioned > 0 or #sealed > 0 then
 				card.ability.x_mult = card.ability.x_mult + card.ability.extra*(#enhanced+#editioned+#sealed)
 				return {
 					message = localize{type='variable',key='a_xmult',vars={card.ability.x_mult}},
@@ -317,12 +310,12 @@ SMODS.Joker{
 		if context.setting_blind then
 			local pos = nil
 			for k, v in ipairs(G.jokers.cards) do
-				if v == card then 
+				if v == card then
 					pos = k
 					break
 				end
 			end
-			if pos 
+			if pos
 			and G.jokers.cards[pos+1]
 			and not card.getting_sliced
 			and not G.jokers.cards[pos+1].ability.eternal
@@ -367,7 +360,7 @@ SMODS.Joker{
 		}
 	end,
 	blueprint_compat = true,
-	calculate = function(self, card, context) 
+	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
 				mult = card.ability.mult,
@@ -756,7 +749,7 @@ SMODS.Joker{
 	},
 	update = function(self, card, dt)
 		if card.ability then
-			if card.ability.extra.image then 
+			if card.ability.extra.image then
 				card.config.center.soul_pos = card.ability.extra.image
 			else
 				if pseudorandom("Mods Image") < 0.01 then
@@ -1003,4 +996,128 @@ SMODS.Joker{
 			end
 		end
 	end
+}
+
+SMODS.Atlas{
+	key = "suits_lc",
+	path = "suits_lc.png",
+	px = 71,
+	py = 95,
+}
+
+SMODS.Atlas{
+	key = "suits_hc",
+	path = "suits_hc.png",
+	px = 71,
+	py = 95,
+}
+
+SMODS.Atlas{
+	key = "suits_ui_lc",
+	path = "suits_ui_lc.png",
+	px = 18,
+	py = 18,
+}
+
+SMODS.Atlas{
+	key = "suits_ui_hc",
+	path = "suits_ui_hc.png",
+	px = 18,
+	py = 18,
+}
+
+SMODS.Suit {
+	key = "suitless",
+	card_key = "N",
+	pos = { y = 0 },
+	ui_pos = {
+		x = 0,
+		y = 0,
+	},
+	lc_atlas = "suits_lc",
+	hc_atlas = "suits_hc",
+	lc_ui_atlas = "suits_ui_lc",
+	hc_ui_atlas = "suits_ui_hc",
+	lc_colour = HEX("bfbfbf"),
+	hc_colour = HEX("313a45"),
+	in_pool = function(self, args)
+		return false
+	end,
+}
+
+SMODS.Joker{
+	key = "gooner_guy",
+	atlas = "jokers",
+	pos = {
+		x = 9,
+		y = 3,
+	},
+	soul_pos = {
+		x = 9,
+		y = 4,
+	},
+	config = {
+		extra = {
+			xmult = 1,
+			mult = 0,
+			chips = 0,
+			money = 0,
+			xmult_mod = 0.5,
+			mult_mod = 5,
+			chips_mod = 30,
+			money_mod = 1,
+		}
+	},
+	loc_vars = function(self,info_queue,card)
+		return {
+			vars = {
+				card.ability.extra.xmult_mod,
+				card.ability.extra.xmult,
+				card.ability.extra.money_mod,
+				card.ability.extra.money,
+				card.ability.extra.chips_mod,
+				card.ability.extra.chips,
+				card.ability.extra.mult_mod,
+				card.ability.extra.mult,
+			}
+		}
+	end,
+	rarity = 4,
+	cost = 20,
+	blueprint_compat = true,
+	perishable_compat = false,
+	calculate = function(self,card,context)
+		if context.joker_main then
+			return {
+				chips = card.ability.extra.chips,
+				mult = card.ability.extra.mult,
+				xmult = card.ability.extra.xmult,
+			}
+		end
+		if context.individual and context.cardarea == G.play and not context.blueprint then
+			local other_card = context.other_card
+			if other_card:is_suit("Hearts") then
+				card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_mod
+			end
+			if other_card:is_suit("Diamonds") then
+				card.ability.extra.money = card.ability.extra.money+card.ability.extra.money_mod
+			end
+			if other_card:is_suit("Spades") then
+				card.ability.extra.chips = card.ability.extra.chips+card.ability.extra.chips_mod
+			end
+			if other_card:is_suit("Clubs") then
+				card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.mult_mod
+			end
+			SMODS.change_base(other_card, "bra_suitless")
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					other_card:juice_up()
+					return true
+				end
+			}))
+		end
+	end,
+	calc_dollar_bonus = function(self, card)
+		return card.ability.extra.money
+	end,
 }

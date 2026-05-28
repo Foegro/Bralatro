@@ -142,6 +142,16 @@ return {
 					"{C:spades}Spades: {C:mult}+#3#{} Mult",
 					"{C:clubs}Clubs: {C:mult}+#4#{} Mult"
 				}
+			},
+			j_bra_gooner_guy = {
+				name = "Gooner Guy",
+				text = {
+					"Removes the suit of all scored cards.",
+					"+{X:mult,C:white}X#1#{} Mult per removed {C:hearts}Heart{}. {C:inactive}(Currently: {X:mult,C:white}X#2#{})",
+					"+{C:money}$#3#{} at the end of round per removed {C:diamonds}Diamond{}. {C:inactive}(Currently: {C:money}+$#4#{})",
+					"{C:chips}+#5#{} Chips per removed {C:spades}Spade{}. {C:inactive}(Currently: {C:chips}+#6#{} Chips)",
+					"{C:mult}+#7#{} Mult per removed {C:clubs}Club{}. {C:inactive}(Currently: {C:mult}+#8#{} Mult)",
+				}
 			}
 		},
         Other={},
@@ -173,13 +183,19 @@ return {
         poker_hands={},
         quips={},
         ranks={},
-        suits_plural={},
-        suits_singular={},
+        suits_plural={
+			bra_suitless = "Nothings"
+		},
+        suits_singular={
+			bra_suitless = "Suiless"
+		},
         tutorial={},
         v_dictionary={
 			a_bra_greentoad_mult = "+#1#.0 Mult",
 			a_bra_rubees = "#1# Rubees!",
-			a_bra_hampter = "Hampter in #1#!"
+			a_bra_hampter = "Hampter in #1#!",
+			a_bra_plus_xmult = "+#1# XMult",
+			a_bra_plus_money = "+$#1#",
 		},
         v_text={},
     },

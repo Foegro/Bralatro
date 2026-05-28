@@ -1,0 +1,17 @@
+[manifest]
+version = "1.0.0"
+priority = 0
+
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = "return self.base.suit == suit"
+position = "at"
+payload = '''
+if self.base.suit ~= "bra_suitless" or (G.GAME.suitless_mode and G.GAME.suitless_mode == "Suit") then return self.base.suit == suit
+else
+    if G.GAME.suitless_mode and G.GAME.suitless_mode == "Wild" then return true end
+    return false
+end
+'''
+match_indent = true
