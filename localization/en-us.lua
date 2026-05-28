@@ -135,12 +135,12 @@ return {
 			j_bra_rescue_toads = {
 				name = "Rescue Toads",
 				text = {
-					"{X:mult,C:white}X#1#{} Mult and {X:chips,C:white}X#2#{} Chips",
-					"if your deck contains",
-					"at least {C:attention}#3# {C:hearts}Hearts",
-					"at least {C:attention}#3# {C:diamonds}Diamonds",
-					"at least {C:attention}#3# {C:spades}Spades and",
-					"at least {C:attention}#3# {C:clubs}Clubs"
+					"Each scored card gives {C:mult}+Mult{} equal to the amount",
+					"of cards of the same suit in your deck",
+					"{C:hearts}Hearts: {C:mult}+#1#{} Mult",
+					"{C:diamonds}Diamonds: {C:mult}+#2#{} Mult",
+					"{C:spades}Spades: {C:mult}+#3#{} Mult",
+					"{C:clubs}Clubs: {C:mult}+#4#{} Mult"
 				}
 			}
 		},

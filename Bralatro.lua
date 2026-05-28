@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.12.0
+--- VERSION: 0.12.1
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -960,44 +960,45 @@ SMODS.Joker{
 		x = 8,
 		y = 2,
 	},
-	config = {
-		extra = {
-			cards = 20,
-			xmult = 2,
-			xchips = 2,
-		},
-	},
 	loc_vars = function(self,info_queue,card)
-		return {
-			vars = {
-				card.ability.extra.xmult,
-				card.ability.extra.xchips,
-				card.ability.extra.cards,
-			}
-		}
-	end,
-	rarity = 2,
-	cost = 7,
-	blueprint_compat = true,
-	calculate = function(self,card,context)
-		if context.joker_main then
-			local hearts = 0
-			local diamonds = 0
-			local spades = 0
-			local clubs = 0
+		local hearts = 0
+		local diamonds = 0
+		local spades = 0
+		local clubs = 0
+		if G.playing_cards then
 			for k, v in ipairs(G.playing_cards) do
 				if v:is_suit("Hearts") then hearts = hearts+1 end
 				if v:is_suit("Diamonds") then diamonds = diamonds+1 end
 				if v:is_suit("Spades") then spades = spades+1 end
 				if v:is_suit("Clubs") then clubs = clubs+1 end
 			end
-			if hearts >= card.ability.extra.cards and
-			diamonds >= card.ability.extra.cards and
-			spades >= card.ability.extra.cards and
-			clubs >= card.ability.extra.cards then
+		else
+			hearts = 13
+			diamonds = 13
+			spades = 13
+			clubs = 13
+		end
+		return {
+			vars = {
+				hearts,
+				diamonds,
+				spades,
+				clubs,
+			}
+		}
+	end,
+	rarity = 3,
+	cost = 8,
+	blueprint_compat = true,
+	calculate = function(self,card,context)
+		if context.individual and context.cardarea == G.play then
+			local mult = 0
+			for k, v in ipairs(G.playing_cards) do
+				if v:is_suit(context.other_card.base.suit) then mult = mult+1 end
+			end
+			if mult > 0 then
 				return {
-					xmult = card.ability.extra.xmult,
-					xchips = card.ability.extra.xchips,
+					mult = mult,
 				}
 			end
 		end
