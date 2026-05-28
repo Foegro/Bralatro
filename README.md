@@ -16,7 +16,7 @@ A Balatro mod with tons of Bringle related things
 <img width="1536" height="896" alt="image" src="https://github.com/user-attachments/assets/0f41f06d-0162-486d-a5ad-48a1002d05ad" />
 <img width="1536" height="896" alt="image" src="https://github.com/user-attachments/assets/4594cb3b-db39-4342-b286-948a9460f91e" />
 <img width="1536" height="896" alt="image" src="https://github.com/user-attachments/assets/9d65bc0e-cd39-4dcc-a0e9-f2fbc4780c83" />
-(Ignore it being common here, it's a legendary)
+(Ignore it being common here, it's a legendary. Also it shows the face of a random mod each time)
 <img width="1536" height="896" alt="image" src="https://github.com/user-attachments/assets/f38bd5a5-50d3-46e9-8bc8-07257e53ad47" />
 <img width="1536" height="896" alt="image" src="https://github.com/user-attachments/assets/5692cff7-1c3f-463c-823e-e48d6beb4766" />
 <img width="1536" height="896" alt="image" src="https://github.com/user-attachments/assets/76ca1d70-7e43-4ffb-a52a-ff910eda2f40" />
