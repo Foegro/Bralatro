@@ -762,7 +762,7 @@ SMODS.Joker{
 				if pseudorandom("Mods Image") < 0.01 then
 					card.ability.extra.image = {
 						x = 1+math.min(3,math.floor(4*pseudorandom("Mods Image"))),
-						y =	3
+						y =	2
 					}
 					card.config.center.soul_pos = card.ability.extra.image
 				else
