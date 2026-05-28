@@ -115,6 +115,33 @@ return {
 					"create a copy of a {C:attention}random{} one of them",
 					"and place it in your hand",
 				}
+			},
+			j_bra_floof = {
+				name = "FloofDumbus",
+				text = {
+					"{X:mult,C:white}X#1#{} Mult for every {C:attention}Pair{}",
+					"of a {C:attention}King{} and a {C:attention}Queen{} in your deck",
+					"Currently {X:mult,C:white}X#2#{} Mult",
+					"{C:inactive}Example: 5 Kings, 3 Queens -> 3 Pairs -> {X:mult,C:white}X4.5"
+				}
+			},
+			j_bra_hampter_mario = {
+				name = "Hampter Mario",
+				text = {
+					"Sell after {C:attention}#1#{} Round(s)",
+					"to create a {C:attention}Hampter Wheel"
+				}
+			},
+			j_bra_rescue_toads = {
+				name = "Rescue Toads",
+				text = {
+					"{X:mult,C:white}X#1#{} Mult and {X:chips,C:white}X#2#{} Chips",
+					"if your deck contains",
+					"at least {C:attention}#3# {C:hearts}Hearts",
+					"at least {C:attention}#3# {C:diamonds}Diamonds",
+					"at least {C:attention}#3# {C:spades}Spades and",
+					"at least {C:attention}#3# {C:clubs}Clubs"
+				}
 			}
 		},
         Other={},
@@ -135,7 +162,7 @@ return {
 			k_bra_brepic = "Brepic",
 			k_bra_eee = "eeeeeeeeeeeeee",
 			k_bra_big_eee = "EEEEEEEEEEEEEEEEEEEEEEE",
-			k_bra_big_hampter = "Hampter!!!",
+			k_bra_hampter = "Hampter!!!",
 			k_bra_boobify = "Broobify",
 		},
         high_scores={},
@@ -152,6 +179,7 @@ return {
         v_dictionary={
 			a_bra_greentoad_mult = "+#1#.0 Mult",
 			a_bra_rubees = "#1# Rubees!",
+			a_bra_hampter = "Hampter in #1#!"
 		},
         v_text={},
     },

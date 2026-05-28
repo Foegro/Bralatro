@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.11.0
+--- VERSION: 0.12.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -584,7 +584,7 @@ SMODS.Joker{
 			return {
 				xchips = card.ability.extra.xchips,
 				xchip_message = {
-					message = localize("k_bra_big_hampter"),
+					message = localize("k_bra_hampter"),
 					colour = G.C.CHIPS,
 				},
 				message_card = card,
@@ -625,7 +625,7 @@ SMODS.Joker{
 	eternal_compat = false,
 	perishable_compat = false,
 	calculate = function(self,card,context)
-		if context.end_of_round and context.main_eval then
+		if context.end_of_round and context.main_eval and not context.blueprint then
 			card.ability.extra.rubees = card.ability.extra.rubees+card.ability.extra.rubees_per_round
 			return {
 				message = localize{
@@ -854,3 +854,152 @@ SMODS.Joker{
 	end
 }
 
+SMODS.Joker{
+	key = "floof",
+	atlas = "jokers",
+	pos = {
+		x = 2,
+		y = 1,
+	},
+	soul_pos = {
+		x = 2,
+		y = 2,
+	},
+	config = {
+		extra = 1.5
+	},
+	loc_vars = function(self,info_queue,card)
+		local xmult
+		if G.playing_cards then
+			local queens = 0
+			local kings = 0
+			for k, v in ipairs(G.playing_cards) do
+				if v:get_id() == 12 then queens = queens+1 end
+				if v:get_id() == 13 then kings = kings+1 end
+			end
+			xmult = math.max(1,card.ability.extra*math.min(queens,kings))
+		else
+			xmult = 6
+		end
+		return {
+			vars = {
+				card.ability.extra,
+				xmult
+			}
+		}
+	end,
+	rarity = 4,
+	cost = 20,
+	blueprint_compat = true,
+	calculate = function(self,card,context)
+		if context.joker_main then
+			local queens = 0
+			local kings = 0
+			for k, v in ipairs(G.playing_cards) do
+				if v:get_id() == 12 then queens = queens+1 end
+				if v:get_id() == 13 then kings = kings+1 end
+			end
+			local xmult = card.ability.extra*math.min(queens,kings)
+			if xmult > 1 then
+				return {
+					xmult = xmult
+				}
+			end
+		end
+	end
+}
+
+SMODS.Joker{
+	key = "hampter_mario",
+	atlas = "jokers",
+	pos = {
+		x = 1,
+		y = 3,
+	},
+	config = {
+		extra = 5,
+	},
+	loc_vars = function(self,info_queue,card)
+		info_queue[#info_queue+1] = G.P_CENTERS.j_bra_hampter_wheel
+		return {
+			vars = {
+				card.ability.extra
+			}
+		}
+	end,
+	rarity = 3,
+	cost = 8,
+	blueprint_compat = true,
+	calculate = function(self,card,context)
+		if context.end_of_round and context.main_eval and not context.blueprint and card.ability.extra > 0 then
+			card.ability.extra = card.ability.extra-1
+			return {
+				message = localize{
+					type = "variable",
+					key = "a_bra_hampter",
+					vars = {
+						card.ability.extra
+					}
+				}
+			}
+		end
+		if context.selling_self and card.ability.extra <= 0 then
+			local joker = SMODS.create_card{
+				key = "j_bra_hampter_wheel"
+			}
+			joker.add_to_deck()
+			G.jokers:emplace(joker)
+		end
+	end,
+}
+
+SMODS.Joker{
+	key = "rescue_toads",
+	atlas = "jokers",
+	pos = {
+		x = 8,
+		y = 2,
+	},
+	config = {
+		extra = {
+			cards = 20,
+			xmult = 2,
+			xchips = 2,
+		},
+	},
+	loc_vars = function(self,info_queue,card)
+		return {
+			vars = {
+				card.ability.extra.xmult,
+				card.ability.extra.xchips,
+				card.ability.extra.cards,
+			}
+		}
+	end,
+	rarity = 2,
+	cost = 7,
+	blueprint_compat = true,
+	calculate = function(self,card,context)
+		if context.joker_main then
+			local hearts = 0
+			local diamonds = 0
+			local spades = 0
+			local clubs = 0
+			for k, v in ipairs(G.playing_cards) do
+				if v:is_suit("Hearts") then hearts = hearts+1 end
+				if v:is_suit("Diamonds") then diamonds = diamonds+1 end
+				if v:is_suit("Spades") then spades = spades+1 end
+				if v:is_suit("Clubs") then clubs = clubs+1 end
+			end
+			if hearts >= card.ability.extra.cards and
+			diamonds >= card.ability.extra.cards and
+			spades >= card.ability.extra.cards and
+			clubs >= card.ability.extra.cards then
+				return {
+					xmult = card.ability.extra.xmult,
+					xchips = card.ability.extra.xchips,
+				}
+			end
+		end
+	end
+}
