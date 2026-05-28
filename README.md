@@ -20,6 +20,6 @@ A Balatro mod with tons of Bringle related things
 <img width="1536" height="896" alt="image" src="https://github.com/user-attachments/assets/f38bd5a5-50d3-46e9-8bc8-07257e53ad47" />
 <img width="1536" height="896" alt="image" src="https://github.com/user-attachments/assets/5692cff7-1c3f-463c-823e-e48d6beb4766" />
 <img width="1536" height="896" alt="image" src="https://github.com/user-attachments/assets/76ca1d70-7e43-4ffb-a52a-ff910eda2f40" />
-<img width="1536" height="896" alt="image" src="https://github.com/user-attachments/assets/0e4ded07-207f-4d2a-ac55-ea6f2599d4ca" />
+
 
 
