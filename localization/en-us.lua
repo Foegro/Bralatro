@@ -1,7 +1,15 @@
 return {
     descriptions = {
         Back={},
-        Blind={},
+        Blind={
+			bl_bra_roshambo = {
+				name = "The Roshambo",
+				text = {
+					"After {C:attention}playing your hand{}, play a round of {C:attention}Roshambo{}.",
+					"if you lose, all played cards get {C:attention}debuffed{}.",
+				}
+			}
+		},
         Edition={},
         Enhanced={},
         Joker={

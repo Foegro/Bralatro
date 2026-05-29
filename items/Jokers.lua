@@ -866,9 +866,9 @@ SMODS.Joker{
         end
         if context.selling_self and card.ability.extra <= 0 then
             local joker = SMODS.create_card{
-                key = "j_bra_hampter_wheel"
+                key = "j_bra_hampter_wheel",
             }
-            joker.add_to_deck()
+            joker:add_to_deck()
             G.jokers:emplace(joker)
         end
     end,

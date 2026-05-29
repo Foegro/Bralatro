@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.14.0
+--- VERSION: 0.14.1
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -20,7 +20,7 @@ local mod_path = "" .. SMODS.current_mod.path
 Bralatro.path = mod_path
 
 local success, dpAPI = pcall(require, "debugplus-api")
-local logger = { -- Placeholder logger, for when DebugPlus isn't available
+Bralatro.logger = { -- Placeholder logger, for when DebugPlus isn't available
     log = print,
     debug = print,
     info = print,
@@ -29,7 +29,7 @@ local logger = { -- Placeholder logger, for when DebugPlus isn't available
 }
 if success and dpAPI.isVersionCompatible(1) then
 	local debugplus = dpAPI.registerID("Bralatro")
-    logger = debugplus.logger -- Provides the logger object
+    Bralatro.logger = debugplus.logger -- Provides the logger object
 	debugplus.addCommand{
 		name = "suitless_mode",
         shortDesc = "Sets or gets suitless mode",
@@ -48,11 +48,11 @@ if success and dpAPI.isVersionCompatible(1) then
 		end
 	}
 	debugplus.addCommand{
-		name = "weights",
+		name = "stats",
 		shortDesc = "Doubles your money",
 		desc = "Dobules your money",
 		exec = function(args, rawArgs, dp)
-			return inspect(G.GAME.probabilities)
+			return inspect(dp.hovered.ability)
 		end
 	}
 end
