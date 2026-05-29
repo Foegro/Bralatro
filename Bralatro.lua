@@ -6,7 +6,7 @@
 --- MOD_DESCRIPTION: Adds Bringle themed cards to the game
 --- BADGE_COLOUR: 891B8A
 --- DISPLAY_NAME:  Bralatro
---- VERSION: 0.13.0
+--- VERSION: 0.14.0
 --- DEPENDENCIES: [Steamodded>=1.0.0~ALPHA-0812d]
 
 ----------------------------------------------
@@ -25,11 +25,27 @@ if success and dpAPI.isVersionCompatible(1) then
     logger = debugplus.logger -- Provides the logger object
 	debugplus.addCommand{
 		name = "suitless_mode",
-        shortDesc = "Testing command",
-        desc = "Moves blind to the middle of the screen",
+        shortDesc = "Sets or gets suitless mode",
+        desc = "Use the command to set the suitless mode in arg1 or get it by leaving out the argument",
 		exec = function(args, rawArgs, dp)
-			G.GAME.suitless_mode = args[1]
-			return G.GAME.suitless_mode
+			if args[1] then G.GAME.bra_suitless_mode = args[1] end
+			return G.GAME.bra_suitless_mode
+		end
+	}
+	debugplus.addCommand{
+		name = "rich",
+		shortDesc = "Doubles your money",
+		desc = "Dobules your money",
+		exec = function(args, rawArgs, dp)
+			G.GAME.dollars = G.GAME.dollars*2
+		end
+	}
+	debugplus.addCommand{
+		name = "weights",
+		shortDesc = "Doubles your money",
+		desc = "Dobules your money",
+		exec = function(args, rawArgs, dp)
+			return inspect(G.GAME.probabilities)
 		end
 	}
 end
@@ -1120,4 +1136,140 @@ SMODS.Joker{
 	calc_dollar_bonus = function(self, card)
 		return card.ability.extra.money
 	end,
+}
+
+SMODS.Atlas{
+	key = "vouchers",
+	path = "Vouchers.png",
+	px = 71,
+	py = 95,
+}
+
+SMODS.Voucher{
+	key = "black_paint",
+	atlas = "vouchers",
+	pos = {
+		x = 2,
+		y = 0,
+	},
+	config = {
+		extra = "Suit"
+	},
+	cost = 10,
+	redeem = function(self, card)
+		G.GAME.bra_suitless_mode = card.ability.extra
+	end,
+	in_pool = function(self, args)
+		if G.playing_cards then
+			for k, v in ipairs(G.playing_cards) do
+				if v.base.suit == "bra_suitless" then
+					return true
+				end
+			end
+		end
+		return false
+	end
+}
+
+SMODS.Voucher{
+	key = "washing_machine",
+	atlas = "vouchers",
+	pos = {
+		x = 2,
+		y = 1,
+	},
+	config = {
+		extra = "Wild",
+	},
+	cost = 10,
+	requires = {"v_bra_black_paint"},
+	redeem = function(self, card)
+		G.GAME.bra_suitless_mode = card.ability.extra
+	end,
+}
+
+SMODS.Voucher{
+	key = "bruck",
+	atlas = "vouchers",
+	pos = {
+		x = 0,
+		y = 0,
+	},
+	config = {
+		extra = 2,
+	},
+	loc_vars = function(self,info_queue,card)
+		return {
+			vars = {
+				card.ability.extra
+			}
+		}
+	end,
+	cost = 10,
+	redeem = function(self,card)
+		G.GAME.bra_brepic_mod = G.GAME.bra_brepic_mod*card.ability.extra
+	end
+}
+
+SMODS.Voucher{
+	key = "streamer_luck",
+	atlas = "vouchers",
+	pos = {
+		x = 0,
+		y = 0,
+	},
+	config = {
+		extra = 0.005,
+	},
+	cost = 10,
+	requires = {"v_bra_bruck"},
+	redeem = function(self,card)
+		G.GAME.bra_legendary_chance = card.ability.extra
+	end
+}
+
+local get_current_pool_ref = get_current_pool
+function get_current_pool(_type, _rarity, _legendary, _append)
+	if _type == 'Joker' and not _rarity and G.GAME.bra_legendary_chance and G.GAME.bra_legendary_chance*G.GAME.legendary_mod > pseudorandom("Streamer Luck") then
+		return get_current_pool_ref(_type,nil,true,_append)
+	end
+	return get_current_pool_ref(_type,_rarity,_legendary,_append)
+end
+
+SMODS.Atlas{
+	key = "tarots",
+	path = "Tarots.png",
+	px = 71,
+	py = 95,
+}
+
+SMODS.Consumable{
+	key = "shunned",
+	set = "Tarot",
+	atlas = "tarots",
+	pos = {
+		x = 0,
+		y = 0,
+	},
+	config = {
+		suit_conv = "bra_suitless",
+		max_highlighted = 5
+	},
+	loc_vars = function(self,info_queue,card)
+		return {
+			vars = {
+				card.ability.max_highlighted
+			}
+		}
+	end,
+	in_pool = function(self, args)
+		if G.playing_cards then
+			for k, v in ipairs(G.playing_cards) do
+				if v.base.suit == "bra_suitless" then
+					return true
+				end
+			end
+		end
+		return false
+	end
 }

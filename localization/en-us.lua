@@ -159,8 +159,42 @@ return {
         Spectral={},
         Stake={},
         Tag={},
-        Tarot={},
-        Voucher={},
+        Tarot={
+			c_bra_shunned = {
+				name = "The Shunned",
+				text = {
+					"Turns up to {C:attention}#1#{} selected cards",
+					"into {C:bra_suitless}Suitless{} Cards"
+				}
+			}
+		},
+        Voucher={
+			v_bra_black_paint = {
+				name = "Black Paint",
+				text = {
+					"{C:bra_suitless}Suitless{} Cards count as their own suit."
+				}
+			},
+			v_bra_washing_machine = {
+				name = "Washing Machine",
+				text = {
+					"{C:bra_suitless}Suitless{} cards count as {C:attention}any{} suit"
+				}
+			},
+			v_bra_bruck = {
+				name = "Bruck",
+				text = {
+					"{C:bra_brepic}Brepic{} Jokers appear",
+					"{C:attention}X#1#{} times as often.",
+				}
+			},
+			v_bra_streamer_luck = {
+				name = "Streamer Luck",
+				text = {
+					"{C:legendary}Legendary{} Jokers can appear in shop",
+				}
+			}
+		},
     },
     misc = {
         achievement_descriptions={},
