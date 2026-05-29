@@ -1216,7 +1216,7 @@ SMODS.Voucher{
 	atlas = "vouchers",
 	pos = {
 		x = 0,
-		y = 0,
+		y = 1,
 	},
 	config = {
 		extra = 0.005,
