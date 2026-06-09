@@ -836,10 +836,6 @@ SMODS.Joker{
         x = 1,
         y = 3,
     },
-    soul_pos = {
-        x = 1,
-        y = 4,
-    },
     config = {
         extra = 5,
     },
