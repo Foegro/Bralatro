@@ -8,10 +8,21 @@ target = "card.lua"
 pattern = "return self.base.suit == suit"
 position = "at"
 payload = '''
-if self.base.suit ~= "bra_suitless" or (G.GAME.suitless_mode and G.GAME.suitless_mode == "Suit") then return self.base.suit == suit
+if self.base.suit ~= "bra_suitless" or (G.GAME.bra_suitless_mode and G.GAME.bra_suitless_mode == "Suit") then return self.base.suit == suit
 else
-    if G.GAME.suitless_mode and G.GAME.suitless_mode == "Wild" then return true end
+    if G.GAME.bra_suitless_mode and G.GAME.bra_suitless_mode == "Wild" then return true end
     return false
 end
+'''
+match_indent = true
+
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "G.FUNCS.evaluate_play()"
+position = "at"
+payload = '''
+if G.GAME.blind.name == "bl_bra_roshambo" then G.GAME.blind:roshambo()
+else G.FUNCS.evaluate_play() end
 '''
 match_indent = true

@@ -1,14 +1,7 @@
-SMODS.Atlas{
-    key = "tarots",
-    path = "Tarots.png",
-    px = 71,
-    py = 95,
-}
-
 SMODS.Consumable{
     key = "shunned",
     set = "Tarot",
-    atlas = "tarots",
+    atlas = "consumables",
     pos = {
         x = 0,
         y = 0,

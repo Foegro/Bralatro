@@ -41,6 +41,10 @@ SMODS.Suit {
     lc_colour = HEX("bfbfbf"),
     hc_colour = HEX("313a45"),
     in_pool = function(self, args)
-        return false
+        return G.GAME.bra_suitless_mode and (G.GAME.bra_suitless_mode == "Suit" or G.GAME.bra_suitless_mode == "Wild")
     end,
+    loc_vars = function(self, info_queue, card)
+        Bralatro.add_suitless_info_queue(info_queue)
+        return {}
+    end
 }

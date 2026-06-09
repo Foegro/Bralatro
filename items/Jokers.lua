@@ -103,7 +103,6 @@ SMODS.Joker{
     blueprint_compat = true,
     calculate = function(self, card, context)
         if context.discard then
-            logger.log(inspect(card.children.floating_sprite))
             local tarot = create_card('Tarot',G.consumeables, nil, nil, nil, nil, nil, 'car')
             tarot:set_edition({negative = true})
             tarot:add_to_deck()
@@ -607,23 +606,23 @@ SMODS.Joker{
                     colour = HEX("8400c4")
                 })
                 G.E_MANAGER:add_event(Event{trigger = "after", delay = 0.3,
-                                            func = function()
-                                                local joker = SMODS.create_card{
-                                                    set = "Joker",
-                                                    key = "j_bra_broob",
-                                                }
-                                                joker.edition = old_joker.edition
-                                                joker.ability.eternal = old_joker.ability.eternal
-                                                joker.ability.perishable = old_joker.ability.perishable
-                                                joker.ability.perish_tally = old_joker.ability.perish_tally
-                                                joker.ability.rental = old_joker.ability.rental
-                                                joker:add_to_deck()
-                                                joker.facing='back'
-                                                joker:set_card_area(G.jokers)
-                                                G.jokers.cards[pos-1] = joker
-                                                joker:flip()
-                                                return true
-                                            end})
+                    func = function()
+                        local joker = SMODS.create_card{
+                                set = "Joker",
+                            key = "j_bra_broob",
+                        }
+                        joker.edition = old_joker.edition
+                        joker.ability.eternal = old_joker.ability.eternal
+                        joker.ability.perishable = old_joker.ability.perishable
+                        joker.ability.perish_tally = old_joker.ability.perish_tally
+                        joker.ability.rental = old_joker.ability.rental
+                        joker:add_to_deck()
+                        joker.facing='back'
+                        joker:set_card_area(G.jokers)
+                        G.jokers.cards[pos-1] = joker
+                        joker:flip()
+                        return true
+                    end})
             end
             if G.jokers.cards[pos+1] and G.jokers.cards[pos+1].ability.name ~= "j_bra_broob" then
                 local old_joker = G.jokers.cards[pos+1]
@@ -633,23 +632,23 @@ SMODS.Joker{
                     colour = HEX("8400c4")
                 })
                 G.E_MANAGER:add_event(Event{trigger = "after", delay = 0.3,
-                                            func = function()
-                                                local joker = SMODS.create_card{
-                                                    set = "Joker",
-                                                    key = "j_bra_broob",
-                                                }
-                                                joker.edition = old_joker.edition
-                                                joker.ability.eternal = old_joker.ability.eternal
-                                                joker.ability.perishable = old_joker.ability.perishable
-                                                joker.ability.perish_tally = old_joker.ability.perish_tally
-                                                joker.ability.rental = old_joker.ability.rental
-                                                joker:add_to_deck()
-                                                joker.facing='back'
-                                                joker:set_card_area(G.jokers)
-                                                G.jokers.cards[pos+1] = joker
-                                                joker:flip()
-                                                return true
-                                            end})
+                    func = function()
+                        local joker = SMODS.create_card{
+                            set = "Joker",
+                            key = "j_bra_broob",
+                        }
+                        joker.edition = old_joker.edition
+                        joker.ability.eternal = old_joker.ability.eternal
+                        joker.ability.perishable = old_joker.ability.perishable
+                        joker.ability.perish_tally = old_joker.ability.perish_tally
+                        joker.ability.rental = old_joker.ability.rental
+                        joker:add_to_deck()
+                        joker.facing='back'
+                        joker:set_card_area(G.jokers)
+                        G.jokers.cards[pos+1] = joker
+                        joker:flip()
+                        return true
+                    end})
             end
         end
     end,
@@ -837,6 +836,10 @@ SMODS.Joker{
         x = 1,
         y = 3,
     },
+    soul_pos = {
+        x = 1,
+        y = 4,
+    },
     config = {
         extra = 5,
     },
@@ -950,6 +953,7 @@ SMODS.Joker{
         }
     },
     loc_vars = function(self,info_queue,card)
+        Bralatro.add_suitless_info_queue(info_queue)
         return {
             vars = {
                 card.ability.extra.xmult_mod,
@@ -1001,4 +1005,91 @@ SMODS.Joker{
     calc_dollar_bonus = function(self, card)
         return card.ability.extra.money
     end,
+}
+
+SMODS.Joker{
+    key = "roy",
+    atlas = "jokers",
+    pos = {
+        x = 0,
+        y = 5,
+    },
+    config = {
+        extra = {
+            charges = 0,
+            per_card = 1,
+            enhancement = 1,
+            edition = 5,
+            seal = 20,
+        }
+    },
+    loc_vars = function(self,info_queue,card)
+        Bralatro.add_suitless_info_queue(info_queue)
+        return {
+            vars = {
+                card.ability.extra.per_card,
+                card.ability.extra.enhancement,
+                card.ability.extra.edition,
+                card.ability.extra.seal,
+                card.ability.extra.charges,
+            }
+        }
+    end,
+    rarity = 3,
+    cost = 8,
+    blueprint_compat = false,
+    calculate = function(self,card,context)
+        if context.discard then
+            if context.other_card.base.suit ~= "bra_suitless" then
+                SMODS.change_base(context.other_card,"bra_suitless")
+                card.ability.extra.charges = card.ability.extra.charges+card.ability.extra.per_card
+                return {
+                    message_card = card,
+                    message = localize{
+                        type = "variable",
+                        key = "a_bra_charges",
+                        vars = {
+                            card.ability.extra.charges
+                        }
+                    },
+                    colour = G.C.EDITION
+                }
+            end
+        end
+        if context.before then
+            for _, v in ipairs(context.scoring_hand) do
+                if card.ability.extra.charges >= card.ability.extra.seal and not v.seal then
+                    v:set_seal(SMODS.poll_seal{
+                        guaranteed = true,
+                        type_key = "bra_roy",
+                    })
+                    card.ability.extra.charges = card.ability.extra.charges-card.ability.extra.seal
+                elseif card.ability.extra.charges >= card.ability.extra.edition and not v.edition then
+                    v:set_edition(SMODS.poll_edition{
+                        guaranteed = true,
+                        type_key = "bra_roy",
+                        no_negative = true,
+                    })
+                    card.ability.extra.charges = card.ability.extra.charges-card.ability.extra.edition
+                elseif card.ability.extra.charges >= card.ability.extra.enhancement and v.config.center == G.P_CENTERS.c_base then
+                    v:set_ability(SMODS.poll_enhancement{
+                        guaranteed = true,
+                        type_key = "bra_roy",
+                    })
+                    card.ability.extra.charges = card.ability.extra.charges-card.ability.extra.enhancement
+                end
+            end
+            return {
+                message_card = card,
+                message = localize{
+                    type = "variable",
+                    key = "a_bra_charges",
+                    vars = {
+                        card.ability.extra.charges
+                    }
+                },
+                colour = G.C.EDITION,
+            }
+        end
+    end
 }

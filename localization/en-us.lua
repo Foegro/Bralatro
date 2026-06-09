@@ -3,10 +3,14 @@ return {
         Back={},
         Blind={
 			bl_bra_roshambo = {
-				name = "The Roshambo",
+				name = "The Roshambo (WIP)",
 				text = {
-					"After {C:attention}playing your hand{}, play a round of {C:attention}Roshambo{}.",
-					"if you lose, all played cards get {C:attention}debuffed{}.",
+					"After {C:attention}playing your hand{},",
+					"play a round of {C:attention}Roshambo{}.",
+					"If you lose,",
+					"all played cards get {C:attention}debuffed{}.",
+					"{C:red,E:2}Not yet functional.",
+					"{C:red,E:2}Will not show up during runs."
 				}
 			}
 		},
@@ -160,9 +164,50 @@ return {
 					"{C:chips}+#5#{} Chips per removed {C:spades}Spade{}. {C:inactive}(Currently: {C:chips}+#6#{} Chips)",
 					"{C:mult}+#7#{} Mult per removed {C:clubs}Club{}. {C:inactive}(Currently: {C:mult}+#8#{} Mult)",
 				}
+			},
+			j_bra_roy = {
+				name = "Roy Koopa",
+				text = {
+					"Removes the suit from every {C:attention}discarded{} card",
+					"and gains {C:attention}#1# {C:dark_edition,E:2}Charge{} per suit removed.",
+					"On each scored card:",
+					"Consumes {C:attention}#2# {C:dark_edition,E:2}Charge{} to add an {C:attention}enhancement{}.",
+					"Consumes {C:attention}#3# {C:dark_edition,E:2}Charges{} to add an {C:attention}edition{}. {C:inactive}(Negative excluded)",
+					"Consumes {C:attention}#4# {C:dark_edition,E:2}Charges{} to add a {C:attention}seal{}.",
+					"{C:inactive}(Currently {C:attention}#5# {C:dark_edition,E:2}Charge(s){C:inactive})",
+					"	",
+					"{C:inactive}Will only apply 1 per card",
+					"{C:inactive}Always applies the most expensive addition,",
+					"{C:inactive}that you have the {C:dark_edition,E:2}Charges{C:inactive} for",
+					"{C:inactive}and that the card doesn't already have."
+				}
 			}
 		},
-        Other={},
+        Other={
+			bra_suitless_no_suit = {
+				name = "Suitless",
+				text = {
+					"Does not count as a suit.",
+					"{C:inactive}(e.g. 5 Suitless Cards do not make a flush)"
+				}
+			},
+			bra_suitless_wild = {
+				name = "Suitless",
+				text = {
+					"Can be used",
+					"as any suit."
+				}
+			},
+			undiscovered_bra_pixels={
+				name="Not Discovered",
+				text={
+					"Purchase or use",
+					"this card in an",
+					"unseeded run to",
+					"learn what it does",
+				},
+			},
+		},
         Planet={},
         Spectral={},
         Stake={},
@@ -216,6 +261,8 @@ return {
 			k_bra_big_eee = "EEEEEEEEEEEEEEEEEEEEEEE",
 			k_bra_hampter = "Hampter!!!",
 			k_bra_boobify = "Broobify",
+			k_bra_pixels = "Pixel",
+			b_bra_pixels_cards = "Pixels",
 		},
         high_scores={},
         labels={
@@ -238,6 +285,7 @@ return {
 			a_bra_hampter = "Hampter in #1#!",
 			a_bra_plus_xmult = "+#1# XMult",
 			a_bra_plus_money = "+$#1#",
+			a_bra_charges = "#1# Charges"
 		},
         v_text={},
     },
