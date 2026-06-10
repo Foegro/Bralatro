@@ -1117,6 +1117,7 @@ SMODS.Joker{
     end,
     rarity = 2,
     cost = 6,
+    blueprint_compat = false,
     add_to_deck = function(self, card, from_debuff)
         G.GAME.starting_params.ante_scaling = G.GAME.starting_params.ante_scaling*card.ability.extra.blind_size
     end,
@@ -1127,6 +1128,68 @@ SMODS.Joker{
         if context.bra_dollar_mult then
             return {
                 dollar_mult = card.ability.extra.dollar_mult
+            }
+        end
+    end
+}
+
+local card_change_suit_ref = Card.change_suit
+function Card:change_suit(new_suit)
+    SMODS.calculate_context({
+        bra_suit_change = true,
+        card = self,
+        old_suit = self.base.suit,
+        new_suit = new_suit
+    })
+    card_change_suit_ref(self,new_suit)
+end
+
+SMODS.Joker{
+    key = "woop",
+    atlas = "jokers",
+    pos = {
+        x = 2,
+        y = 5,
+    },
+    soul_pos = {
+        x = 2,
+        y = 6,
+    },
+    config = {
+        extra = {
+            xmult = 1,
+            xmult_mod = 0.2
+        }
+    },
+    rarity = 4,
+    cost = 20,
+    blueprint_compat = true,
+    perishable_compat = false,
+    loc_vars = function(self,info_queue,card)
+        return {
+            vars = {
+                card.ability.extra.xmult,
+                card.ability.extra.xmult_mod,
+            }
+        }
+    end,
+    calculate = function(self,card,context)
+        if context.bra_suit_change and context.old_suit ~= context.new_suit then
+            card.ability.extra.xmult = card.ability.extra.xmult+card.ability.extra.xmult_mod
+            return {
+                message_card = card,
+                message = localize{
+                    type = "variable",
+                    key = "a_xmult",
+                    vars = {
+                        card.ability.extra.xmult
+                    }
+                },
+            }
+        end
+        if context.joker_main then
+            return {
+                xmult = card.ability.extra.xmult
             }
         end
     end

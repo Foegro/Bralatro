@@ -188,6 +188,14 @@ return {
 					"{X:attention,C:white}X#1#{} Blind Size",
 					"{X:money,C:white}X#2#{} end of round payout"
 				}
+			},
+			j_bra_woop = {
+				name = "Woop",
+				text = {
+					"{X:mult,C:white}X#1#{} Mult",
+					"Gains {X:mult,C:white}X#2#{} Mult whenever a card changes suit.",
+					"{C:inactive}So gay he is every color of the rainbow"
+				}
 			}
 		},
         Other={
