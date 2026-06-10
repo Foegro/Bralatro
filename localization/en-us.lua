@@ -181,6 +181,13 @@ return {
 					"{C:inactive}that you have the {C:dark_edition,E:2}Charges{C:inactive} for",
 					"{C:inactive}and that the card doesn't already have."
 				}
+			},
+			j_bra_challenge_medal = {
+				name = "Challenge Medal",
+				text = {
+					"{X:attention,C:white}X#1#{} Blind Size",
+					"{X:money,C:white}X#2#{} end of round payout"
+				}
 			}
 		},
         Other={

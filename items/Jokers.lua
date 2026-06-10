@@ -1089,3 +1089,45 @@ SMODS.Joker{
         end
     end
 }
+
+SMODS.Joker{
+    key = "challenge_medal",
+    atlas = "jokers",
+    pos = {
+        x = 0,
+        y = 4,
+    },
+    soul_pos = {
+        x = 1,
+        y = 4,
+    },
+    config = {
+        extra = {
+            blind_size = 1.5,
+            dollar_mult = 1.5,
+        }
+    },
+    loc_vars = function(self,info_queue,card)
+        return {
+            vars = {
+                card.ability.extra.blind_size,
+                card.ability.extra.dollar_mult,
+            }
+        }
+    end,
+    rarity = 2,
+    cost = 6,
+    add_to_deck = function(self, card, from_debuff)
+        G.GAME.starting_params.ante_scaling = G.GAME.starting_params.ante_scaling*card.ability.extra.blind_size
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        G.GAME.starting_params.ante_scaling = G.GAME.starting_params.ante_scaling/card.ability.extra.blind_size
+    end,
+    calculate = function(self,card,context)
+        if context.bra_dollar_mult then
+            return {
+                dollar_mult = card.ability.extra.dollar_mult
+            }
+        end
+    end
+}
