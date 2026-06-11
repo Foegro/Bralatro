@@ -1007,7 +1007,7 @@ SMODS.Joker{
     key = "roy",
     atlas = "jokers",
     pos = {
-        x = 0,
+        x = 2,
         y = 5,
     },
     config = {
@@ -1098,8 +1098,8 @@ SMODS.Joker{
         y = 4,
     },
     soul_pos = {
-        x = 1,
-        y = 4,
+        x = 0,
+        y = 5,
     },
     config = {
         extra = {
@@ -1148,12 +1148,12 @@ SMODS.Joker{
     key = "woop",
     atlas = "jokers",
     pos = {
-        x = 2,
-        y = 5,
+        x = 1,
+        y = 4,
     },
     soul_pos = {
-        x = 2,
-        y = 6,
+        x = 1,
+        y = 5,
     },
     config = {
         extra = {
