@@ -196,6 +196,14 @@ return {
 					"Gains {X:mult,C:white}X#2#{} Mult whenever a card changes suit.",
 					"{C:inactive}So gay he is every color of the rainbow"
 				}
+			},
+			j_bra_code_bringle = {
+				name = "Code Bringle",
+				text = {
+					"When you buy a card,",
+					"{C:green}#1# in #2#{} Chance",
+					"to gain {C:money}$#3#{}."
+				}
 			}
 		},
         Other={

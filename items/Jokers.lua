@@ -1194,3 +1194,37 @@ SMODS.Joker{
         end
     end
 }
+
+SMODS.Joker{
+    key = "code_bringle",
+    atlas = "jokers",
+    pos = {
+        x = 2,
+        y = 6,
+    },
+    config = {
+        extra = {
+            money = 5,
+            chance = 2,
+        }
+    },
+    loc_vars = function(self,info_queue,card)
+        return {
+            vars = {
+                ''..(G.GAME and G.GAME.probabilities.normal or 1),
+                card.ability.extra.chance,
+                card.ability.extra.money,
+            }
+        }
+    end,
+    rarity = 2,
+    cost = 5,
+    calculate = function(self,card,context)
+        if context.buying_card and pseudorandom("Code Bringle") > G.GAME.probabilities.normal/card.ability.extra.chance then
+            return {
+                dollars = card.ability.extra.money,
+                message_card = card,
+            }
+        end
+    end
+}
