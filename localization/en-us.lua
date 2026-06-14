@@ -212,6 +212,13 @@ return {
 					"For every {C:attention}#2# {C:inactive}(#3#) {C:enhanced}Consumables{} sold,",
 					"increase hand size by {C:attention}#4#",
 				}
+			},
+			j_bra_bringles_can = {
+				name = "Bringles Can",
+				text = {
+					"At end of round gives {C:money}$#1#{}",
+					"and reduces amount by {C:money}$#2#{}",
+				}
 			}
 		},
         Other={
@@ -294,6 +301,7 @@ return {
 			k_bra_boobify = "Broobify",
 			k_bra_pixels = "Pixel",
 			b_bra_pixels_cards = "Pixels",
+			k_bra_canned = "Canned!",
 		},
         high_scores={},
         labels={

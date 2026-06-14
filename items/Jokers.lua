@@ -1222,6 +1222,7 @@ SMODS.Joker{
     end,
     rarity = 2,
     cost = 5,
+    blueprint_compat = true,
     calculate = function(self,card,context)
         if context.buying_card and pseudorandom("bra_code_bringle") > G.GAME.probabilities.normal/card.ability.extra.chance then
             return {
@@ -1291,5 +1292,63 @@ SMODS.Joker{
         card.config.center.soul_pos.x = card.ability.extra.image
         card.config.center.pos.x = card.ability.extra.image
         if (changed) then card:set_sprites(card.config.center) end
+    end
+}
+
+SMODS.Joker{
+    key = "bringles_can",
+    atlas = "jokers",
+    pos = {
+        x = 7,
+        y = 0,
+    },
+    config = {
+        extra = {
+            money = 10,
+            money_mod = 2,
+        }
+    },
+    loc_vars = function(self,info_queue,card)
+        return {
+            vars = {
+                card.ability.extra.money,
+                card.ability.extra.money_mod
+            }
+        }
+    end,
+    cost = 8,
+    rarity = 2,
+    perishable_compat = false,
+    eternal_compat = false,
+    calc_dollar_bonus = function(self, card)
+        G.E_MANAGER:add_event(Event{
+            func = function()
+                card.ability.extra.money = card.ability.extra.money-card.ability.extra.money_mod
+                if card.ability.extra.money <= 0 then
+                    G.E_MANAGER:add_event(Event{
+                        func = function()
+                            card:start_dissolve()
+                            return true
+                        end
+                    })
+                    card_eval_status_text(card,"extra",nil,nil,nil,{
+                        message = localize("k_bra_canned"),
+                    })
+                else
+                    card_eval_status_text(card,"extra",nil,nil,nil,{
+                        message = localize{
+                            type = "variable",
+                            key = "a_chips_minus",
+                            vars = {
+                                card.ability.extra.money_mod
+                            },
+                        },
+                        colour = G.C.RED
+                    })
+                end
+                return true
+            end
+        })
+        return card.ability.extra.money
     end
 }
