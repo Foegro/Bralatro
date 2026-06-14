@@ -210,7 +210,7 @@ return {
 				text = {
 					"{C:attention}+#1#{} hand size",
 					"For every {C:attention}#2# {C:inactive}(#3#) {C:enhanced}Consumables{} sold,",
-					"Increase hand size by {C:attention}#4#",
+					"increase hand size by {C:attention}#4#",
 				}
 			}
 		},
