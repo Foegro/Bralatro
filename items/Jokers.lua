@@ -332,7 +332,7 @@ SMODS.Joker{
     calculate = function(self, card, context)
         if pseudorandom('chat') < G.GAME.probabilities.normal/card.ability.extra.money_chance then
             return {
-                dollars = math.ceil(pseudorandom('chat_payout')*card.ability.extra.money_max),
+                dollars = math.ceil(pseudorandom('bra_chat_payout')*card.ability.extra.money_max),
                 message_card = card
             }
         end
@@ -370,7 +370,7 @@ SMODS.Joker{
     blueprint_compat = true,
     calculate = function(self,card,context)
         if context.individual and context.other_card.ability.name == 'Wild Card'
-                and pseudorandom("Trans Flavio") < G.GAME.probabilities.normal/card.ability.extra.chance then
+                and pseudorandom("bra_trans_flavio") < G.GAME.probabilities.normal/card.ability.extra.chance then
             return {
                 dollars = card.ability.extra.money,
                 card = card
@@ -491,12 +491,15 @@ SMODS.Joker{
     end,
     blueprint_compat = true,
     update = function(self, card, dt)
+        local changed = false
         if card.ability then
-            if card.ability.extra.image then card.config.center.pos.x = 4+card.ability.extra.image
-            else
-                card.ability.extra.image = math.min(4,math.floor(5*pseudorandom("Bringle Image")))
+            if not card.ability.extra.image then
+                card.ability.extra.image = math.min(4,math.floor(5*pseudorandom("bra_bringle_image")))
                 card.config.center.pos.x = 4+card.ability.extra.image
+                changed = true
             end
+            card.config.center.pos.x = 4+card.ability.extra.image
+            if changed then card:set_sprites(card.config.center) end
         end
     end,
     calculate = function(self,card,context)
@@ -562,7 +565,7 @@ SMODS.Joker{
             local joker = SMODS.create_card{
                 set = "Joker",
                 legendary = true,
-                key_append = "Hampter Wheel",
+                key_append = "bra_hampter_wheel",
             }
             joker:add_to_deck()
             G.jokers:emplace(joker)
@@ -675,24 +678,24 @@ SMODS.Joker{
         ["Bralatro"] = true,
     },
     update = function(self, card, dt)
+        local changed = false
         if card.ability then
-            if card.ability.extra.image then
-                card.config.center.soul_pos = card.ability.extra.image
-            else
+            if not card.ability.extra.image then
                 if pseudorandom("Mods Image") < 0.01 then
                     card.ability.extra.image = {
-                        x = 1+math.min(3,math.floor(4*pseudorandom("Mods Image"))),
+                        x = 1+math.min(3,math.floor(4*pseudorandom("bra_mods_image"))),
                         y =	2
                     }
-                    card.config.center.soul_pos = card.ability.extra.image
                 else
                     card.ability.extra.image = {
-                        x = 2+math.min(5,math.floor(6*pseudorandom("Mods Image"))),
+                        x = 2+math.min(5,math.floor(6*pseudorandom("bra_mods_image"))),
                         y =	4
                     }
-                    card.config.center.soul_pos = card.ability.extra.image
                 end
+                changed = true
             end
+            card.config.center.soul_pos = card.ability.extra.image
+            if changed then card:set_sprites(card.config.center) end
         end
     end,
     calculate = function(self,card,context)
@@ -751,7 +754,7 @@ SMODS.Joker{
             end
             if #queens >= card.ability.extra then
                 G.playing_card = (G.playing_card and G.playing_card + 1) or 1
-                local _card = copy_card(pseudorandom_element(queens,"Mother 3"), nil, nil, G.playing_card)
+                local _card = copy_card(pseudorandom_element(queens,"bra_joker3"), nil, nil, G.playing_card)
                 _card:add_to_deck()
                 G.deck.config.card_limit = G.deck.config.card_limit + 1
                 table.insert(G.playing_cards, _card)
@@ -1220,11 +1223,73 @@ SMODS.Joker{
     rarity = 2,
     cost = 5,
     calculate = function(self,card,context)
-        if context.buying_card and pseudorandom("Code Bringle") > G.GAME.probabilities.normal/card.ability.extra.chance then
+        if context.buying_card and pseudorandom("bra_code_bringle") > G.GAME.probabilities.normal/card.ability.extra.chance then
             return {
                 dollars = card.ability.extra.money,
                 message_card = card,
             }
         end
+    end
+}
+
+SMODS.Joker{
+    key = "bowser",
+    atlas = "jokers",
+    pos = {
+        x = 0,
+        y = 6,
+    },
+    soul_pos = {
+        x = 0,
+        y = 7,
+    },
+    config = {
+        extra = {
+            handsize = 0,
+            handsize_mod = 1,
+            sells = 5,
+            sells_left = 5,
+        },
+    },
+    loc_vars = function(self,info_queue,card)
+        return {
+            vars = {
+                card.ability.extra.handsize,
+                card.ability.extra.sells,
+                card.ability.extra.sells_left,
+                card.ability.extra.handsize_mod,
+            }
+        }
+    end,
+    cost = 20,
+    rarity = 4,
+    calculate = function(self,card,context)
+        if context.selling_card and context.card.ability.consumeable then
+            card.ability.extra.sells_left = card.ability.extra.sells_left-1
+            if card.ability.extra.sells_left <= 0 then
+                card.ability.extra.sells_left = card.ability.extra.sells
+                card.ability.extra.handsize = card.ability.extra.handsize+card.ability.extra.handsize_mod
+                G.hand:change_size(card.ability.extra.handsize_mod)
+            end
+        end
+    end,
+    remove_from_deck = function(self, card, from_debuff)
+        if not from_debuff then
+            G.hand:change_size(-card.ability.extra.handsize)
+        end
+    end,
+    update = function(self, card, dt)
+        local changed = false
+        if not card.ability.extra.image then
+            if pseudorandom("bra_bowser") < 0.05 then
+                card.ability.extra.image = 1
+            else
+                card.ability.extra.image = 0
+            end
+            changed = true
+        end
+        card.config.center.soul_pos.x = card.ability.extra.image
+        card.config.center.pos.x = card.ability.extra.image
+        if (changed) then card:set_sprites(card.config.center) end
     end
 }

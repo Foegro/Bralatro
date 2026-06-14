@@ -204,6 +204,14 @@ return {
 					"{C:green}#1# in #2#{} Chance",
 					"to gain {C:money}$#3#{}."
 				}
+			},
+			j_bra_bowser = {
+				name = "Bowser",
+				text = {
+					"{C:attention}+#1#{} hand size",
+					"For every {C:attention}#2# {C:inactive}(#3#) {C:enhanced}Consumables{} sold,",
+					"Increase hand size by {C:attention}#4#",
+				}
 			}
 		},
         Other={
