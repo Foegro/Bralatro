@@ -32,25 +32,25 @@ if success and dpAPI.isVersionCompatible(1) then
     Bralatro.logger = debugplus.logger -- Provides the logger object
 	debugplus.addCommand{
 		name = "suitless_mode",
-        shortDesc = "Sets or gets suitless mode",
-        desc = "Use the command to set the suitless mode in arg1 or get it by leaving out the argument",
+		desc = "",
+		shortDesc = "",
 		exec = function(args, rawArgs, dp)
 			if args[1] then G.GAME.bra_suitless_mode = args[1] end
 			return G.GAME.bra_suitless_mode
 		end
 	}
 	debugplus.addCommand{
-		name = "rich",
-		shortDesc = "Doubles your money",
-		desc = "Dobules your money",
+		name = "diamond",
+		desc = "",
+		shortDesc = "",
 		exec = function(args, rawArgs, dp)
-			G.GAME.dollars = G.GAME.dollars*2
+			SMODS.change_base(dp.hovered,"Diamond")
 		end
 	}
 	debugplus.addCommand{
 		name = "stats",
-		shortDesc = "Doubles your money",
-		desc = "Dobules your money",
+		desc = "",
+		shortDesc = "",
 		exec = function(args, rawArgs, dp)
 			return inspect(dp.hovered.config.center)
 		end

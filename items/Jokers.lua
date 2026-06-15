@@ -1138,13 +1138,28 @@ SMODS.Joker{
 
 local card_change_suit_ref = Card.change_suit
 function Card:change_suit(new_suit)
-    SMODS.calculate_context({
-        bra_suit_change = true,
-        card = self,
-        old_suit = self.base.suit,
-        new_suit = new_suit
-    })
+    if card.base.suit ~= suit then
+        SMODS.calculate_context({
+            bra_suit_change = true,
+            card = self,
+            old_suit = self.base.suit,
+            new_suit = new_suit
+        })
+    end
     card_change_suit_ref(self,new_suit)
+end
+
+local smods_change_base_ref = SMODS.change_base
+SMODS.change_base = function(card, suit, rank, manual_sprites)
+    if card.base.suit ~= suit then
+        SMODS.calculate_context({
+            bra_suit_change = true,
+            card = self,
+            old_suit = card.base.suit,
+            new_suit = suit
+        })
+    end
+    return smods_change_base_ref(card,suit,rank,manual_sprites)
 end
 
 SMODS.Joker{
@@ -1177,7 +1192,7 @@ SMODS.Joker{
         }
     end,
     calculate = function(self,card,context)
-        if context.bra_suit_change and context.old_suit ~= context.new_suit then
+        if context.bra_suit_change then
             card.ability.extra.xmult = card.ability.extra.xmult+card.ability.extra.xmult_mod
             return {
                 message_card = card,
