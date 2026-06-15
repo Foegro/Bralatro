@@ -1154,7 +1154,7 @@ SMODS.change_base = function(card, suit, rank, manual_sprites)
     if card.base.suit ~= suit then
         SMODS.calculate_context({
             bra_suit_change = true,
-            card = self,
+            card = card,
             old_suit = card.base.suit,
             new_suit = suit
         })
