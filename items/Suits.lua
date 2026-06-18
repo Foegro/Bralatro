@@ -48,3 +48,19 @@ SMODS.Suit {
         return {}
     end
 }
+
+Bralatro.add_suitless_info_queue = function(info_queue)
+    if G.GAME.bra_suitless_mode and G.GAME.bra_suitless_mode == "Wild" then info_queue[#info_queue+1] = {key = "bra_suitless_wild", set = "Other"}
+    elseif not G.GAME.bra_suitless_mode or G.GAME.bra_suitless_mode ~= "Suit" then info_queue[#info_queue+1] = {key = "bra_suitless_no_suit", set = "Other"} end
+end
+
+Bralatro.suitless_in_deck = function()
+    if G.playing_cards then
+        for k, v in ipairs(G.playing_cards) do
+            if v.base.suit == "bra_suitless" then
+                return true
+            end
+        end
+    end
+    return false
+end

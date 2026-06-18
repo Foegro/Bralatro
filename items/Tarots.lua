@@ -18,13 +18,6 @@ SMODS.Consumable{
         }
     end,
     in_pool = function(self, args)
-        if G.playing_cards then
-            for k, v in ipairs(G.playing_cards) do
-                if v.base.suit == "bra_suitless" then
-                    return true
-                end
-            end
-        end
-        return false
+        return Bralatro.suitless_in_deck()
     end
 }

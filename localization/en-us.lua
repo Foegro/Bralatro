@@ -229,6 +229,15 @@ return {
 					"at end of round",
 				},
 			},
+			j_bra_drained = {
+				name = "Drained Joker",
+				text = {
+					"{C:green}#1# in #2#{} Chance for",
+					"played {C:bra_suitless}Suitless{} Cards",
+					"to reduce the current {C:attention}Blind Size{}",
+					"by {C:attention}#3#%"
+				}
+			}
 		},
         Other={
 			bra_suitless_no_suit = {
@@ -337,6 +346,7 @@ return {
 			a_bra_charges = "#1# Charges",
 			a_bra_e_chips = "^#1# Chips",
 			a_bra_e_mult = "^#1# Mult",
+			a_bra_percent_minus = "-#1#%"
 		},
         v_text={},
     },

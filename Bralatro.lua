@@ -57,11 +57,6 @@ if success and dpAPI.isVersionCompatible(1) then
 	}
 end
 
-Bralatro.add_suitless_info_queue = function(info_queue)
-	if G.GAME.bra_suitless_mode and G.GAME.bra_suitless_mode == "Wild" then info_queue[#info_queue+1] = {key = "bra_suitless_wild", set = "Other"}
-	elseif not G.GAME.bra_suitless_mode or G.GAME.bra_suitless_mode ~= "Suit" then info_queue[#info_queue+1] = {key = "bra_suitless_no_suit", set = "Other"} end
-end
-
 SMODS.current_mod.menu_cards = function()
 	return {
 		{key = "j_bra_bringle"}

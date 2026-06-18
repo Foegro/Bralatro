@@ -1531,3 +1531,57 @@ SMODS.Joker{
         return G.GAME.pool_flags.cavendish_extinct
     end
 }
+
+SMODS.Joker{
+    key = "drained",
+    atlas = "jokers",
+    pos = {
+        x = 0,
+        y = 3,
+    },
+    config = {
+        extra = {
+            reduction = 0.25,
+            chance = 2
+        }
+    },
+    loc_vars = function(self,info_queue,card)
+        local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.chance)
+        return {
+            vars = {
+                num,
+                denom,
+                card.ability.extra.reduction*100,
+            }
+        }
+    end,
+    rarity = 2,
+    cost = 6,
+    calculate = function(self,card,context)
+        if context.cardarea == G.play and context.individual and (context.other_card.base.suit == "bra_suitless" or context.other_card:is_suit("bra_suitless")) and SMODS.pseudorandom_probability(card,"bra_drained",1,card.ability.extra.chance) then
+            return {
+                message = localize{
+                    type = "variable",
+                    key = "a_bra_percent_minus",
+                    vars = {
+                        card.ability.extra.reduction*100
+                    }
+                },
+                colour = G.C.DYN_UI.DARK,
+                func = function()
+                    G.E_MANAGER:add_event(Event{
+                        func = function()
+                            G.GAME.blind.chips = G.GAME.blind.chips*(1-card.ability.extra.reduction)
+                            G.GAME.blind.chip_text = number_format(G.GAME.blind.chips)
+                            G.HUD_blind:recalculate(false)
+                            return true
+                        end
+                    })
+                end
+            }
+        end
+    end,
+    in_pool = function(self,args)
+        return Bralatro.suitless_in_deck()
+    end
+}
