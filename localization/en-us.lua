@@ -320,7 +320,10 @@ return {
 			k_bra_pixels = "Pixel",
 			b_bra_pixels_cards = "Pixels",
 			k_bra_canned = "Canned!",
-			k_bra_degraded = "Degraded"
+			k_bra_degraded = "Degraded",
+			k_bra_coder = "Coder",
+			k_bra_artist = "Artist",
+			k_bra_ideas = "Idea contributor",
 		},
         high_scores={},
         labels={

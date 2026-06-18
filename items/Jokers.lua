@@ -80,7 +80,10 @@ SMODS.Joker{
                 })
             end
         end
-    end
+    end,
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('k_bra_artist'), G.C.RED, G.C.WHITE, 1.2 )
+    end,
 }
 
 SMODS.Joker{
@@ -112,6 +115,9 @@ SMODS.Joker{
             tarot.sell_cost_label = tarot.facing == 'back' and '?' or tarot.sell_cost
             G.consumeables:emplace(tarot)
         end
+    end,
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('k_bra_coder'), G.C.GREEN, G.C.WHITE, 1.2 )
     end,
 }
 
@@ -850,7 +856,10 @@ SMODS.Joker{
                 }
             end
         end
-    end
+    end,
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('k_bra_artist'), G.C.RED, G.C.WHITE, 1.2 )
+    end,
 }
 
 SMODS.Joker{
@@ -1253,7 +1262,10 @@ SMODS.Joker{
                 xmult = card.ability.extra.xmult
             }
         end
-    end
+    end,
+    set_badges = function(self, card, badges)
+        badges[#badges+1] = create_badge(localize('k_bra_ideas'), G.C.BLUE, G.C.WHITE, 1.2 )
+    end,
 }
 
 SMODS.Joker{
@@ -1558,7 +1570,7 @@ SMODS.Joker{
     rarity = 2,
     cost = 6,
     calculate = function(self,card,context)
-        if context.cardarea == G.play and context.individual and (context.other_card.base.suit == "bra_suitless" or context.other_card:is_suit("bra_suitless")) and SMODS.pseudorandom_probability(card,"bra_drained",1,card.ability.extra.chance) then
+        if context.cardarea == G.play and context.individual then
             return {
                 message = localize{
                     type = "variable",
