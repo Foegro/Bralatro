@@ -325,7 +325,7 @@ return {
 			k_bra_degraded = "Degraded",
 			k_bra_coder = "Coder",
 			k_bra_artist = "Artist",
-			k_bra_ideas = "Idea contributor",
+			k_bra_ideas = "Idea Contributor",
 		},
         high_scores={},
         labels={
