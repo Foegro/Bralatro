@@ -32,6 +32,8 @@ return {
 					"Creates a {C:dark_edition}Negative {C:tarot}Tarot{} Card",
 					"when a card is {C:attention}discarded",
 					"and set their {C:attention}sell value {}to {C:attention}$0",
+					"{C:inactive}Makes jokes so bad,",
+					"{C:inactive}they could be a real pun-ishment",
 				}
 			},
 			j_bra_wiimote = {
