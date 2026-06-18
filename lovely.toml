@@ -59,7 +59,7 @@ if config.dollar_mult then
         func = function()
             G.round_eval:add_child(
                     {n=G.UIT.R, config={align = "cm", id = 'dollar_row_'..(dollar_row+1)..'_'..config.name}, nodes={
-                        {n=G.UIT.O, config={object = DynaText({string = {dollar_string}, colours = {G.C.MONEY}, shadow = true, pop_in = 0, scale = 0.65, float = true})}}
+                        {n=G.UIT.O, config={object = DynaText({string = {dollar_string}, colours = {SMODS.Gradients.MONEY}, shadow = true, pop_in = 0, scale = 0.65, float = true})}}
                     }},
                     G.round_eval:get_UIE_by_ID('dollar_'..config.name))
 
@@ -69,5 +69,49 @@ if config.dollar_mult then
         end
     }))
 elseif num_dollars > 60 or num_dollars < -60 then
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "elseif eval_type == 'dollars' then"
+position = "before"
+payload = '''
+elseif eval_type == 'bra_e_chips' then
+    sound = 'xchips'
+    volume = 0.7
+    amt = amt
+    text = localize{type='variable',key='a_bra_e_chips',vars={amt}}
+    colour = SMODS.Gradients.bra_e_chips
+    config.type = 'fade'
+    config.scale = 0.7
+elseif eval_type == 'bra_e_mult' then
+    sound = 'multhit2'
+    volume = 0.7
+    amt = amt
+    text = localize{type='variable',key='a_bra_e_mult',vars={amt}}
+    colour = SMODS.Gradients.bra_e_mult
+    config.type = 'fade'
+    config.scale = 0.7
+'''
+match_indent = true
+
+
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = "elseif extra.swap then"
+position = "before"
+payload = '''
+elseif extra.bra_e_chips_mod then
+    config.type = 'fall'
+    colour = SMODS.Gradients.bra_e_chips
+    config.scale = 0.7
+elseif extra.bra_e_mult_mod then
+    config.type = 'fall'
+    colour = SMODS.Gradients.bra_e_mult
+    config.scale = 0.7
 '''
 match_indent = true

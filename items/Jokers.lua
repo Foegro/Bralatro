@@ -70,12 +70,14 @@ SMODS.Joker{
                 end
             end
             if #enhanced > 0 or #editioned > 0 or #sealed > 0 then
-                card.ability.x_mult = card.ability.x_mult + card.ability.extra*(#enhanced+#editioned+#sealed)
-                return {
-                    message = localize{type='variable',key='a_xmult',vars={card.ability.x_mult}},
-                    colour = G.C.MULT,
-                    message_card = card
-                }
+                SMODS.scale_card(card,{
+                    ref_table = card.ability,
+                    ref_value = "x_mult",
+                    scalar_value = "extra",
+                    operation = function(ref_table, ref_value, initial, change)
+                        ref_table[ref_value] = initial+(#enhanced+#editioned+#sealed)*change
+                    end,
+                })
             end
         end
     end
@@ -141,13 +143,17 @@ SMODS.Joker{
     perishable_compat = false,
     calculate = function(self, card, context)
         if context.before and next(context.poker_hands["Three of a Kind"]) and not context.blueprint then
-            card.ability.chips = card.ability.chips+card.ability.chips_mod
-            return {
-                message = localize("k_bra_eee"),
-                message_card = card,
-                colour = G.C.CHIPS,
-                sound = "bra_wiicrash"
-            }
+            SMODS.scale_card(card,{
+                ref_table = card.ability.extra,
+                ref_value = "chips",
+                scalar_value = "chips_mod",
+                scaling_message = {
+                    message = localize("k_bra_big_eee"),
+                    message_card = card,
+                    colour = G.C.CHIPS,
+                    sound = "bra_wiicrash"
+                }
+            })
         end
         if context.joker_main then
             return {
@@ -185,13 +191,17 @@ SMODS.Joker{
     perishable_compat = false,
     calculate = function(self, card, context)
         if context.before and next(context.poker_hands["Three of a Kind"]) and not context.blueprint then
-            card.ability.mult = card.ability.mult+card.ability.mult_mod
-            return {
-                message = localize("k_bra_big_eee"),
-                message_card = card,
-                colour = G.C.MULT,
-                sound = "bra_wiicrash"
-            }
+            SMODS.scale_card(card,{
+                ref_table = card.ability.extra,
+                ref_value = "mult",
+                scalar_value = "mult_mod",
+                scaling_message = {
+                    message = localize("k_bra_big_eee"),
+                    message_card = card,
+                    colour = G.C.MULT,
+                    sound = "bra_wiicrash"
+                }
+            })
         end
         if context.joker_main then
             return {
@@ -250,7 +260,14 @@ SMODS.Joker{
                 local sliced_card = G.jokers.cards[pos+1]
                 sliced_card.getting_sliced = true
                 G.E_MANAGER:add_event(Event({func = function()
-                    card.ability.extra.money = card.ability.extra.money + card.ability.extra.money_mod
+                    SMODS.scale_card(card,{
+                        ref_table = card.ability.extra,
+                        ref_value = "money",
+                        scalar_value = "money_mod",
+                        scaling_message = {
+                            message = localize("$")+card.ability.extra.money
+                        }
+                    })
                     card:juice_up(0.8, 0.8)
                     sliced_card:start_dissolve({HEX("57ecab")}, nil, 1.6)
                     play_sound('slice1', 0.96+math.random()*0.08)
@@ -330,7 +347,7 @@ SMODS.Joker{
     },
     blueprint_compat = true,
     calculate = function(self, card, context)
-        if pseudorandom('chat') < G.GAME.probabilities.normal/card.ability.extra.money_chance then
+        if SMODS.pseudorandom_probability(card, "bra_chat_tigger", 1, card.ability.extra.money_chance) then
             return {
                 dollars = math.ceil(pseudorandom('bra_chat_payout')*card.ability.extra.money_max),
                 message_card = card
@@ -359,10 +376,11 @@ SMODS.Joker{
     },
     loc_vars = function(self,info_queue,card)
         info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
+        local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.chance)
         return {
             vars = {
-                ''..(G.GAME and G.GAME.probabilities.normal or 1),
-                card.ability.extra.chance,
+                num,
+                denom,
                 card.ability.extra.money
             }
         }
@@ -370,7 +388,7 @@ SMODS.Joker{
     blueprint_compat = true,
     calculate = function(self,card,context)
         if context.individual and context.other_card.ability.name == 'Wild Card'
-                and pseudorandom("bra_trans_flavio") < G.GAME.probabilities.normal/card.ability.extra.chance then
+                and SMODS.pseudorandom_probability(card, "bra_trans_flaviob", 1, card.ability.extra.chance) then
             return {
                 dollars = card.ability.extra.money,
                 card = card
@@ -403,12 +421,15 @@ SMODS.Joker{
         }
     },
     loc_vars = function(self,info_queue,card)
+        local num, en_denom = SMODS.get_probability_vars(card, 1, card.ability.extra.enhancement_chance)
+        local _, ed_denom = SMODS.get_probability_vars(card, 1, card.ability.extra.edition_chance)
+        local _, s_denom = SMODS.get_probability_vars(card, 1, card.ability.extra.seal_chance)
         return {
             vars = {
-                ''..(G.GAME and G.GAME.probabilities.normal or 1),
-                card.ability.extra.enhancement_chance,
-                card.ability.extra.edition_chance,
-                card.ability.extra.seal_chance,
+                num,
+                en_denom,
+                ed_denom,
+                s_denom,
             }
         }
     end,
@@ -418,7 +439,7 @@ SMODS.Joker{
             local enhanced = false
             for k, v in ipairs(context.scoring_hand) do
                 local card_enhanced = false
-                if v.config.center == G.P_CENTERS.c_base and pseudorandom("bug_sticker_bucket_origami") < G.GAME.probabilities.normal/card.ability.extra.enhancement_chance then
+                if v.config.center == G.P_CENTERS.c_base and SMODS.pseudorandom_probability(card, "bra_bug_sticker_origami", 1, card.ability.extra.enhancement_chance) then
                     v:set_ability(SMODS.poll_enhancement{
                         guaranteed = true,
                         type_key = "bug_sticker_bucket_origami"
@@ -426,7 +447,7 @@ SMODS.Joker{
                     enhanced = true
                     card_enhanced = true
                 end
-                if not v.edition and pseudorandom("bug_sticker_bucket_origami") < G.GAME.probabilities.normal/card.ability.extra.edition_chance then
+                if not v.edition and SMODS.pseudorandom_probability(card, "bra_bug_sticker_origami", 1, card.ability.extra.edition_chance) then
                     v:set_edition(SMODS.poll_edition{
                         guaranteed = true,
                         type_key = "bug_sticker_bucket_origami",
@@ -435,7 +456,7 @@ SMODS.Joker{
                     enhanced = true
                     card_enhanced = true
                 end
-                if not v.seal and pseudorandom("bug_sticker_bucket_origami") < G.GAME.probabilities.normal/card.ability.extra.seal_chance then
+                if not v.seal and SMODS.pseudorandom_probability(card, "bra_bug_sticker_origami", 1, card.ability.extra.seal_chance) then
                     v:set_seal(SMODS.poll_seal{
                         guaranteed = true,
                         type_key = "bug_sticker_bucket_origami"
@@ -853,6 +874,8 @@ SMODS.Joker{
     rarity = 3,
     cost = 8,
     blueprint_compat = true,
+    eternal_compat = false,
+    perishable_compat = false,
     calculate = function(self,card,context)
         if context.end_of_round and context.main_eval and not context.blueprint and card.ability.extra > 0 then
             card.ability.extra = card.ability.extra-1
@@ -981,16 +1004,41 @@ SMODS.Joker{
         if context.individual and context.cardarea == G.play and not context.blueprint then
             local other_card = context.other_card
             if other_card:is_suit("Hearts") then
-                card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_mod
+                SMODS.scale_card(card,{
+                    ref_table = card.ability.extra,
+                    ref_value = "xmult",
+                    scalar_value = "xmult_mod",
+                    message_key = "a_xmult",
+                    message_colour = G.C.MULT
+                })
             end
             if other_card:is_suit("Diamonds") then
-                card.ability.extra.money = card.ability.extra.money+card.ability.extra.money_mod
+                SMODS.scale_card(card,{
+                    ref_table = card.ability.extra,
+                    ref_value = "money",
+                    scalar_value = "money_mod",
+                    scaling_message = {
+                        message = localize("$")+card.ability.extra.money
+                    }
+                })
             end
             if other_card:is_suit("Spades") then
-                card.ability.extra.chips = card.ability.extra.chips+card.ability.extra.chips_mod
+                SMODS.scale_card(card,{
+                    ref_table = card.ability.extra,
+                    ref_value = "chips",
+                    scalar_value = "chips_mod",
+                    message_key = "a_chips",
+                    message_colour = G.C.CHIPS
+                })
             end
             if other_card:is_suit("Clubs") then
-                card.ability.extra.mult = card.ability.extra.mult+card.ability.extra.mult_mod
+                SMODS.scale_card(card,{
+                    ref_table = card.ability.extra,
+                    ref_value = "mult",
+                    scalar_value = "mult_mod",
+                    message_key = "a_mult",
+                    message_colour = G.C.MULT
+                })
             end
             SMODS.change_base(other_card, "bra_suitless")
             G.E_MANAGER:add_event(Event({
@@ -1036,7 +1084,6 @@ SMODS.Joker{
     end,
     rarity = 3,
     cost = 8,
-    blueprint_compat = false,
     calculate = function(self,card,context)
         if context.discard then
             if context.other_card.base.suit ~= "bra_suitless" then
@@ -1138,7 +1185,7 @@ SMODS.Joker{
 
 local card_change_suit_ref = Card.change_suit
 function Card:change_suit(new_suit)
-    if card.base.suit ~= suit then
+    if self.base.suit ~= suit then
         SMODS.calculate_context({
             bra_suit_change = true,
             card = self,
@@ -1193,17 +1240,13 @@ SMODS.Joker{
     end,
     calculate = function(self,card,context)
         if context.bra_suit_change then
-            card.ability.extra.xmult = card.ability.extra.xmult+card.ability.extra.xmult_mod
-            return {
-                message_card = card,
-                message = localize{
-                    type = "variable",
-                    key = "a_xmult",
-                    vars = {
-                        card.ability.extra.xmult
-                    }
-                },
-            }
+            SMODS.scale_card(card,{
+                ref_table = card.ability.extra,
+                ref_value = "xmult",
+                scalar_value = "xmult_mod",
+                message_key = "a_xmult",
+                message_colour = G.C.MULT
+            })
         end
         if context.joker_main then
             return {
@@ -1227,10 +1270,11 @@ SMODS.Joker{
         }
     },
     loc_vars = function(self,info_queue,card)
+        local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.chance)
         return {
             vars = {
-                ''..(G.GAME and G.GAME.probabilities.normal or 1),
-                card.ability.extra.chance,
+                num,
+                denom,
                 card.ability.extra.money,
             }
         }
@@ -1239,7 +1283,7 @@ SMODS.Joker{
     cost = 5,
     blueprint_compat = true,
     calculate = function(self,card,context)
-        if context.buying_card and pseudorandom("bra_code_bringle") > G.GAME.probabilities.normal/card.ability.extra.chance then
+        if context.buying_card and SMODS.pseudorandom_probability(card, "bra_code_bringle", 1, card.ability.extra.chance) then
             return {
                 dollars = card.ability.extra.money,
                 message_card = card,
@@ -1284,7 +1328,12 @@ SMODS.Joker{
             card.ability.extra.sells_left = card.ability.extra.sells_left-1
             if card.ability.extra.sells_left <= 0 then
                 card.ability.extra.sells_left = card.ability.extra.sells
-                card.ability.extra.handsize = card.ability.extra.handsize+card.ability.extra.handsize_mod
+                SMODS.scale_card(card,{
+                    ref_table = card.ability.extra,
+                    ref_value = "handsize",
+                    scalar_value = "handsize_mod",
+                    no_message = true
+                })
                 G.hand:change_size(card.ability.extra.handsize_mod)
             end
         end
@@ -1338,7 +1387,13 @@ SMODS.Joker{
     calc_dollar_bonus = function(self, card)
         G.E_MANAGER:add_event(Event{
             func = function()
-                card.ability.extra.money = card.ability.extra.money-card.ability.extra.money_mod
+                SMODS.scale_card(card,{
+                    ref_table = card.ability.extra,
+                    ref_value = "money",
+                    scalar_value = "money_mod",
+                    operation = "-",
+                    no_message = true
+                })
                 if card.ability.extra.money <= 0 then
                     G.E_MANAGER:add_event(Event{
                         func = function()
@@ -1365,5 +1420,114 @@ SMODS.Joker{
             end
         })
         return card.ability.extra.money
+    end
+}
+
+SMODS.Joker:take_ownership('cavendish',
+    {
+        calculate = function(self, card, context)
+            if context.joker_main then
+                return {
+                    x_mult = card.ability.extra.Xmult
+                }
+            end
+            if context.end_of_round and context.main_eval and not context.blueprint then
+                if SMODS.pseudorandom_probability(card,"cavendish", 1, card.ability.extra.odds) then
+                    G.GAME.pool_flags.cavendish_extinct = true
+                    G.E_MANAGER:add_event(Event({
+                        func = function()
+                            play_sound('tarot1')
+                            card.T.r = -0.2
+                            card:juice_up(0.3, 0.4)
+                            card.states.drag.is = true
+                            card.children.center.pinch.x = true
+                            G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                                 func = function()
+                                     G.jokers:remove_card(self)
+                                     card:remove()
+                                     card = nil
+                                     return true; end}))
+                            return true
+                        end
+                    }))
+                    return {
+                        message = localize('k_extinct_ex')
+                    }
+                else
+                    return {
+                        message = localize('k_safe_ex')
+                    }
+                end
+            end
+        end,
+        in_pool = function(self,args)
+            return G.GAME.pool_flags.gros_michel_extinct and not G.GAME.pool_flags.cavendish_extinct
+        end
+    },
+    true
+)
+
+SMODS.Joker{
+    key = "uranium_cube",
+    atlas = "jokers",
+    pos = {
+        x = 8,
+        y = 1,
+    },
+    config = {
+        extra = {
+            e_mult = 2,
+            chance = 10000
+        }
+    },
+    loc_vars = function(self,info_queue,card)
+        local num, denom = SMODS.get_probability_vars(card, 1, card.ability.extra.chance)
+        return {
+            vars = {
+                card.ability.extra.e_mult,
+                num,
+                denom,
+            }
+        }
+    end,
+    cost = 3,
+    eternal_compat = false,
+    blueprint_compat = true,
+    calculate = function(self,card,context)
+        if context.joker_main then
+            return {
+                bra_e_mult = card.ability.extra.e_mult
+            }
+        end
+        if context.end_of_round and context.main_eval and not context.blueprint then
+            if SMODS.pseudorandom_probability(card, "bra_uranium_cube", 1, card.ability.extra.chance) then
+                G.E_MANAGER:add_event(Event({
+                    func = function()
+                        play_sound('tarot1')
+                        card.T.r = -0.2
+                        card:juice_up(0.3, 0.4)
+                        card.states.drag.is = true
+                        card.children.center.pinch.x = true
+                        G.E_MANAGER:add_event(Event({trigger = 'after', delay = 0.3, blockable = false,
+                        func = function()
+                            G.jokers:remove_card(self)
+                            card:remove()
+                            card = nil
+                            return true; end}))
+                        return true
+                    end
+                }))
+                return {
+                    message = localize("k_bra_degraded")
+                }
+            else
+                return {
+                    message = localize("k_safe_ex")
+                }
+            end
+        end
+    end,
+    in_pool = function(self,args)
+        return G.GAME.pool_flags.cavendish_extinct
     end
 }

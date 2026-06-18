@@ -219,7 +219,16 @@ return {
 					"At end of round gives {C:money}$#1#{}",
 					"and reduces amount by {C:money}$#2#{}",
 				}
-			}
+			},
+			j_bra_uranium_cube={
+				name="Uranium Cube",
+				text={
+					"{X:bra_e_mult,C:white} ^#1# {} Mult",
+					"{C:green}#2# in #3#{} chance this",
+					"card is destroyed",
+					"at end of round",
+				},
+			},
 		},
         Other={
 			bra_suitless_no_suit = {
@@ -284,7 +293,7 @@ return {
 				text = {
 					"{C:legendary}Legendary{} Jokers can appear in shop",
 				}
-			}
+			},
 		},
     },
     misc = {
@@ -302,6 +311,7 @@ return {
 			k_bra_pixels = "Pixel",
 			b_bra_pixels_cards = "Pixels",
 			k_bra_canned = "Canned!",
+			k_bra_degraded = "Degraded"
 		},
         high_scores={},
         labels={
@@ -324,7 +334,9 @@ return {
 			a_bra_hampter = "Hampter in #1#!",
 			a_bra_plus_xmult = "+#1# XMult",
 			a_bra_plus_money = "+$#1#",
-			a_bra_charges = "#1# Charges"
+			a_bra_charges = "#1# Charges",
+			a_bra_e_chips = "^#1# Chips",
+			a_bra_e_mult = "^#1# Mult",
 		},
         v_text={},
     },
